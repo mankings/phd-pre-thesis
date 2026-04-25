@@ -5,6 +5,154 @@
 bnyx - go again
 \end{introduction}
 
-\section{Edge Networking and Private/Public Interactions}
+setup: 5g is adopted and telco still looking to expand on costumer verticals 
 
-\section{Multi-Level Network Federation}
+problem: 
+
+solution: multi-provider, distributed continum
+
+% Edge deployments exist and have hard constraints (MEC)
+% 5G lets us slice those resources with guarantees (Network Slicing)
+% real scenarios span multiple operators/domains, and current federation is broken (Multi-domain Federation)
+
+
+% MEC standards and ETSI frameworks — deployment models, APIs, service lifecycle
+% Private edge deployments — enterprise and venue-scale (stadium, factory, campus)
+% Latency, throughput, and data sovereignty constraints in edge environments
+
+% Federation models — resource, service, and data federation across operators
+% East-West Bound Interfaces (EWBI) — standards, security, dynamic resource sharing
+% Slice mobility and handoff management across administrative domains
+% Cross-domain interconnection — inter-operator APIs, peering, SLA enforcement
+% Gaps in existing federation architectures — scalability, agility, statelessness
+
+\section{Network Function Virtualization}
+
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/02/nfv.png}
+    \caption{NFV Functional Blocks \cite{GSNFV002}}
+    \label{fig:nfv-overview}
+\end{figure}
+
+\subsection{NFV Reference Architecture}
+
+% intro and driving factors
+Traditional network architectures rely heavily on proprietary hardware appliances for each specific function, such as firewalls, routers, and load balancers. These hardware-based solutions are not only costly but also inflexible, making it challenging to scale and adapt to dynamic network demands. 
+
+\ac{nfv} represents a paradigm shift, transitioning from hardware-dependent network functions to virtualized software solutions. By leveraging virtualization techniques, \ac{nfv} allows for dynamic deployment of \acp{nf}, such as routers, switches, and firewalls, on \ac{cots} hardware as \acp{vnf}. This approach decouples network functions from proprietary hardware, enabling them to run on standard servers, storage, and networking equipment.
+
+As stated in \cite{GSNFV002}, \ac{nfv} brings several benefits over traditional approaches:
+\begin{itemize}
+    \item \emph{Hardware Independence}: \acp{vnf} can be deployed on any \ac{cots} hardware, reducing the dependency on proprietary hardware; 
+    \item \emph{Flexibility and Scalability}: \acp{nf} benefit from increased flexibility and scalability, as they can be deployed and scaled dynamically and distributed across multiple locations; 
+    \item \emph{Capital Efficiency}: \ac{nfv} reduces capital expenditures by enabling the use of \ac{cots} hardware and reducing the need for specialized hardware;
+    \item \emph{Operational Efficiency}: \ac{nfv} simplifies the management and operation of network functions, reducing the operational expenditure;
+    \item \emph{Rapid Service Innovation}: \ac{nfv} enables rapid deployment of new services and features, reducing the time-to-market;
+    \item \emph{Vendor Interoperability}: By leveraging standardized and open interfaces, \ac{nfv} promotes a multivendor ecosystem where \acp{vnf} and infrastructure components from different providers can coexist and interoperate.
+\end{itemize}
+
+Figure \ref{fig:nfv_architecture} presents the high-level architecture of the \ac{nfv} framework, as detailed by \ac{etsi}. The architecture is composed of three main domains:
+\begin{itemize}
+    \item \emph{\acp{vnf}}: Software implementations of network functions capable of running on \ac{nfvi} resources;
+    \item \emph{\ac{nfvi}}: The hardware and software resources that host \acp{vnf}, including compute, storage, and networking resources;
+    \item \emph{\ac{mano}}: The management and orchestration system responsible for managing the lifecycle of \acp{vnf} and \ac{nfvi} resources.
+\end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figs/02/nfv.png}
+    \caption{High-level NFV architecture (adapted from \cite{GSNFV002})}
+    \label{fig:nfv_architecture}
+\end{figure}
+
+\subsection{NFV Reference Architecture}
+
+Figure \ref{fig:nfv_reference_architecture} presents the \ac{nfv} reference architecture, as defined by \ac{etsi}, providing a more comprehensive view of the \ac{nfv} architecture. The \ac{nfv}-\ac{mano} domain is further divided into three building blocks:
+
+\begin{itemize}
+    \item \emph{\acp{vnfm}}: responsible for managing the lifecycle of \acp{vnf}, including instantiation, scaling, updating, and termination. It interacts with both the \ac{vim} and \ac{nfvo} to ensure the \ac{vnf} operates as intended within the \ac{nfv} infrastructure.
+    \item \emph{\acp{vim}}: manages the \ac{nfv} infrastructure resources, such as compute, storage, and networking, within a single administrative domain. It provides resource abstraction and allocation, enabling the \ac{nfvo} and \ac{vnfm} to deploy and manage \acp{vnf}.
+    \item \emph{\acp{nfvo}}: is responsible for orchestrating and managing \acp{nf} across multiple \ac{vim} instances and ensuring the overall coordination of resources and services within the \ac{nfv} environment. It also handles policy-based resource optimization and \ac{sla} management.
+\end{itemize}
+
+The other components of the framework are the \ac{oss}/\ac{bss}, which allows for \ac{nfv} service providers to interact with the \ac{nfv} infrastructure, enabling service provisioning, billing, and customer management; the Service, \ac{vnf} and Infrastructure Descriptions, which contain templates/descriptors used internally within the \ac{nfvo} to be translated into functional blocks; and the \ac{ems} which manages the functionality of one or more \acp{vnf}. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figs/02/nfv-reference.png}
+    \caption{ETSI NFV reference architecture \cite{GSNFV002}}
+    \label{fig:nfv_reference_architecture}
+\end{figure}
+
+
+\section{Multi-access Edge Computing}
+
+% intro and driving factorss
+The centralized cloud approach still presented challenges for latency-sensitive applications. This gave rise to \ac{mec}, 
+
+The traditional Cloud Computing approach centralizes compute and storage resources in far away data centers
+
+Edge provides these resources at the network edge, accessible fron the ran
+
+High-level overview
+
+\subsection{MEC Reference Architecture}
+% TODO: refactor
+
+The reference architecture for \ac{mec}, as defined by \ac{etsi} in \ac{mec} \ac{gs} 03 \cite{GSMEC003}, is presented in Figure \ref{fig:mec_reference_architecture}. It shows the functional elements that comprise the \ac{mec} system, and the reference points between them.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figs/02/mec-reference.png}
+    \caption{ETSI MEC reference architecture \cite{GSMEC003}}
+    \label{fig:mec_reference_architecture}
+\end{figure}
+
+% mec host
+The \ac{meh} comprises the \ac{mep} and the \ac{vi} that provides the computing, storage and networking resources necessary for the deployment and operation of \ac{mec} applications. The virtualization infrastructure includes a data plane that facilitates the execution of traffic rules and ensures seamless routing among applications, services, and networks.
+
+% mec platform
+The \ac{mep} is designed to enable the discovery, advertisement, and consumption of \ac{mec} services by applications. It performs several key functions, such as managing traffic rules, configuring \ac{dns} services, and hosting \ac{mec}-specific services.
+
+% mec applications
+\ac{mec} applications operate as virtualized entities (e.g., containers or virtual machines) within the \ac{mec} host. They rely on the \ac{mep} to access essential services, register their requirements and interact with other applications or external systems. The \ac{mep} validates and manages the application requirements, ensuring compliance with resource constraints and operator policies.
+
+% reference points for host
+The functionalities described above are supported by well-defined reference points. The Mp1 reference point establishes a connection between the \ac{mep} and \ac{mec} applications, enabling service registration, discovery, and communication. Through Mp1, \ac{mec} applications can also activate traffic rules and facilitate session state relocation when required. Mp2 connects the \ac{mep} to the \ac{vi}'s data plane. This connection allows the \ac{mep} to control how traffic is routed among applications, networks, and other services. The Mp3 reference point facilitates communication between different \ac{mep} platforms. 
+
+% mec management
+The management of these components is split between two primary levels: host-level management and system-level management. Host-level management is responsible for managing the individual \ac{mec} host resources, while system-level management is responsible for managing the \ac{mec} system as a whole.
+
+% mec orchestrator
+The \ac{meo} is responsible for the system-level management of the \ac{mec} system, overseeing deployed hosts, available resources, and accessible services. It handles application \ac{lcm}, such as onboarding, instantiation, and termination of \ac{mec} applications. It also manages application relocation across hosts when required, ensuring optimal service delivery and resource utilization.
+
+% mec platform manager and vi manager
+The host-level management is handled by the \ac{mepm} and the \ac{vim}. The \ac{mepm} oversees the lifecycle of applications, handling tasks such as rule enforcement, conflict resolution, and \ac{dns} configuration. It ensures seamless integration and operation of applications with the \ac{mep}. The \ac{vim} allocates, monitors, and releases the virtualized resources required for hosting \ac{mec} applications. It also reports performance metrics and fault conditions to the \ac{mepm}, facilitating efficient resource management.
+
+% reference points for management
+The Mm1 reference point connects the \ac{meo} to the operator's \ac{oss}, facilitating application instantiation and termination requests. Mm2 links the \ac{oss} to the \ac{mepm} for platform configuration, fault management, and performance monitoring. Additionally, the Mm3 reference point enables direct communication between the \ac{meo} and the \ac{mepm}, streamlining application \ac{lcm} and service coordination. The Mm4 reference point links the \ac{meo} to the \ac{vim}, ensuring effective allocation and tracking of virtualized resources. Mm5, on the other hand, connects the \ac{mepm} with the \ac{mep}, supporting configuration, lifecycle support, and application relocation procedures. Other reference points, such as Mm6 and Mm7, further extend the interaction between \ac{mepm}, \ac{vim} and \ac{vi} to manage resources and optimize application deployment.
+
+% oss
+The \ac{oss} is responsible for managing the \ac{mec} system's operational and business aspects, including service provisioning, billing, and customer management. It interacts with the \ac{meo} and \ac{mepm} to facilitate service instantiation, configuration, and monitoring, and receives requests from the \ac{cfs} via the Mm8 reference point for service delivery.
+
+\section{Network Slicing and Slice Mobility}
+
+Network slicing in 5G-Advanced — 3GPP standards, isolation, E2E guarantees
+% https://youtu.be/SEL-9-P9J8A?si=Xc4_SKHD88VfUJGE
+
+
+\subsection{Network Slicing Architecture}
+
+\section{Multi-domain Network Federation}
+
+
+
+
+% \section{Application scenarios and operational context}
+
+% High-density transient deployments — smart stadiums, crowd analytics, event networks
+% PPDR networks — cross-border interoperability, first responder operational mobility
+% Summary of open challenges and research gaps addressed by this thesis
