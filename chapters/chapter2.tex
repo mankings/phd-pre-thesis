@@ -15,7 +15,6 @@ solution: multi-provider, distributed continum
 % 5G lets us slice those resources with guarantees (Network Slicing)
 % real scenarios span multiple operators/domains, and current federation is broken (Multi-domain Federation)
 
-
 % MEC standards and ETSI frameworks — deployment models, APIs, service lifecycle
 % Private edge deployments — enterprise and venue-scale (stadium, factory, campus)
 % Latency, throughput, and data sovereignty constraints in edge environments
@@ -26,28 +25,64 @@ solution: multi-provider, distributed continum
 % Cross-domain interconnection — inter-operator APIs, peering, SLA enforcement
 % Gaps in existing federation architectures — scalability, agility, statelessness
 
-\section{Network Function Virtualization}
+\section{5G Networks}
 
+Until \ac{5g}, each successive generation of mobile networks delivered incremental gains in throughput and reach while preserving the same fundamental paradigm: a purpose-built, hardware-centric network optimized for a single dominant use case. \ac{5g} breaks from this pattern. Rather than simply extending data rates, 5G was designed from the ground up as a programmable, multi-service platform capable of simultaneously serving heterogeneous vertical industries with vastly different performance requirements.
 
+To address these diverse requirements, the ITU-R IMT-2020 framework defined three canonical usage scenarios: \ac{embb}, targeting peak data rates in the tens of gigabits per second; \ac{urllc}, targeting sub-millisecond latency and near-perfect reliability for mission-critical applications; and \ac{mmtc}, supporting connection densities of up to one million devices per square kilometer for \ac{iot} deployments \cite{IMTFrameworkoverallobjectivesfuturedevelopment2015}. The 5G system achieves this flexibility through the adoption of key enabling technologies such as \ac{nfv}, \ac{sdn}, Network Slicing, and \ac{mec}, that transform the network into a software-defined, service-based, distributed infrastructure.
+
+% 5g arch
+Figure \ref{fig:5g_architecture} shows the reference architecture for the service-based architecture of the \ac{5g} core, where each function exposes REST-based \acp{api} over the Service-Based Interface. The upper functions belong to the control plane, while the bottom functions relate to the user plane.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.9\textwidth]{figs/02/nfv.png}
-    \caption{NFV Functional Blocks \cite{GSNFV002}}
-    \label{fig:nfv-overview}
+    \includegraphics[width=0.8\textwidth]{figs/02/5g-reference.png}
+    \caption{5G Service Based Architecture \cite{3GPP5GSystemarchitecture5GSystem2026}}
+    \label{fig:5g_architecture}
 \end{figure}
 
-\subsection{NFV Reference Architecture}
+The most relevant network functions of the \ac{5g} core are as follows:
+\begin{itemize}
+    \item The \ac{upf} is responsible for user plane packet handling such as routing/forwarding, marking and \ac{qos} enforcing;
+    \item The \ac{amf} manages registration, connection, mobility management and authorization and authentication;
+    \item The \ac{smf} manages the establishment, modification, and termination of data sessions by configuring the \ac{upf};
+    \item The \ac{pcf} defines and enforces rules for \ac{qos}, charging and access control;
+    \item The \ac{nef} exposes the capabilities and events of the \ac{5g} core to external applications and third parties in a controlled, authorized way;
+    \item The \ac{nrf} allows network functions to register and discover each other, acting a central service registry and discovery point for the Service Based Architecture;
+    \item The \ac{udm} stores and manages subscriber data and handles authentication credential generation and access authorization;
+    \item The \ac{ausf} performs the actual authentication of the \acp{ue} using the credentials from the \ac{udm};
+    \item The \ac{nssf} determines which network slice instances should serve the \ac{ue} based on the set \acp{sla} based on subscription info, policies, and requested slice types;
+    \item The \ac{af} represents external or operator applications which are able to interact with the \ac{5g} core via the \ac{nef}.
+\end{itemize}
+
+\subsection{5G-Advanced and the 6G Vision}
+
+In the latest years, the \ac{3gpp} standardization roadmap extended the 5G baseline through a series of incremental releases, collectively referred to as 5G-Advanced \cite{3GPPDigitalcellulartelecommunicationssystemPhase}. These releases introduce native \ac{ai} and \ac{ml} capabilities across both the \ac{ran} and core network, enabling data-driven optimization of resource management, handover decisions, and load balancing. Further enhancements address cross-domain network slicing, extended support for \ac{xr} and immersive services, reduced-capability device classes targeting \ac{iiot} and wearables, and significant improvements in energy efficiency. The trajectory established by these releases directly anticipates the requirements being formalized for the sixth generation under the ITU-R IMT-2030 framework.
+
+% 6g usage scenarios 
+The ITU-R defines six usage scenarios for IMT-2030, expanding upon the three scenarios introduced in IMT-2020 while introducing new scenarios that previous generations were not designed to support \cite{IMTFrameworkoverallobjectivesfuturedevelopment2023}:
+
+\begin{itemize}
+    \item \emph{Immersive Communication}: Extends \ac{embb} to cover high-bandwidth, low-latency interactive experiences, including \ac{xr}, holographic telepresence, and multi-sensory communications;
+    \item \emph{Hyper Reliable and Low-Latency Communication}: Extends \ac{urllc} to address mission-critical use cases where failure to meet reliability and latency     requirements carries severe consequences, such as industrial automation, emergency services, and telemedicine;
+    \item \emph{Massive Communication}: Extends \ac{mmtc} to support the connection of a massive number of devices and sensors across domains such as smart cities, logistics, agriculture, and environmental monitoring.
+    \item \emph{Ubiquitous Connectivity}: Addresses the digital divide by extending meaningful coverage to rural, remote, and underserved areas through interworking with non-terrestrial networks and other access systems.
+    \item \emph{Artificial Intelligence and Communication}: Integrates distributed \ac{ai} workloads, including model training, inference, and computing resource 
+    orchestration, natively into the network infrastructure, enabling use cases such as autonomous driving assistance and digital twin creation;
+    \item \emph{Integrated Sensing and Communication}: Extends the radio interface beyond connectivity to provide sensing capabilities, including positioning, object detection, environmental monitoring, and real-time mapping, without requiring dedicated sensor hardware.
+\end{itemize}
+
+\section{Network Functions Virtualization}
 
 % intro and driving factors
 Traditional network architectures rely heavily on proprietary hardware appliances for each specific function, such as firewalls, routers, and load balancers. These hardware-based solutions are not only costly but also inflexible, making it challenging to scale and adapt to dynamic network demands. 
 
-\ac{nfv} represents a paradigm shift, transitioning from hardware-dependent network functions to virtualized software solutions. By leveraging virtualization techniques, \ac{nfv} allows for dynamic deployment of \acp{nf}, such as routers, switches, and firewalls, on \ac{cots} hardware as \acp{vnf}. This approach decouples network functions from proprietary hardware, enabling them to run on standard servers, storage, and networking equipment.
+\ac{nfv} allowed the transition from hardware-dependent network functions to virtualized software solutions. By leveraging virtualization techniques, \ac{nfv} allows for dynamic deployment of various network functions on \ac{cots} hardware as \acp{vnf}. This approach decouples the functions of the network from proprietary hardware, enabling them to run on standard servers, storage, and networking equipment.
 
-As stated in \cite{GSNFV002}, \ac{nfv} brings several benefits over traditional approaches:
+As stated in \cite{ETSINetworkFunctionsVirtualisationNFVArchitectural2014}, \ac{nfv} brings several benefits over traditional approaches:
 \begin{itemize}
     \item \emph{Hardware Independence}: \acp{vnf} can be deployed on any \ac{cots} hardware, reducing the dependency on proprietary hardware; 
-    \item \emph{Flexibility and Scalability}: \acp{nf} benefit from increased flexibility and scalability, as they can be deployed and scaled dynamically and distributed across multiple locations; 
+    \item \emph{Flexibility and Scalability}: Network functions benefit from increased flexibility and scalability, as they can be deployed and scaled dynamically and distributed across multiple locations; 
     \item \emph{Capital Efficiency}: \ac{nfv} reduces capital expenditures by enabling the use of \ac{cots} hardware and reducing the need for specialized hardware;
     \item \emph{Operational Efficiency}: \ac{nfv} simplifies the management and operation of network functions, reducing the operational expenditure;
     \item \emph{Rapid Service Innovation}: \ac{nfv} enables rapid deployment of new services and features, reducing the time-to-market;
@@ -64,7 +99,7 @@ Figure \ref{fig:nfv_architecture} presents the high-level architecture of the \a
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{figs/02/nfv.png}
-    \caption{High-level NFV architecture (adapted from \cite{GSNFV002})}
+    \caption{High-level NFV architecture (adapted from \cite{ETSINetworkFunctionsVirtualisationNFVArchitectural2014})}
     \label{fig:nfv_architecture}
 \end{figure}
 
@@ -75,7 +110,7 @@ Figure \ref{fig:nfv_reference_architecture} presents the \ac{nfv} reference arch
 \begin{itemize}
     \item \emph{\acp{vnfm}}: responsible for managing the lifecycle of \acp{vnf}, including instantiation, scaling, updating, and termination. It interacts with both the \ac{vim} and \ac{nfvo} to ensure the \ac{vnf} operates as intended within the \ac{nfv} infrastructure.
     \item \emph{\acp{vim}}: manages the \ac{nfv} infrastructure resources, such as compute, storage, and networking, within a single administrative domain. It provides resource abstraction and allocation, enabling the \ac{nfvo} and \ac{vnfm} to deploy and manage \acp{vnf}.
-    \item \emph{\acp{nfvo}}: is responsible for orchestrating and managing \acp{nf} across multiple \ac{vim} instances and ensuring the overall coordination of resources and services within the \ac{nfv} environment. It also handles policy-based resource optimization and \ac{sla} management.
+    \item \emph{\acp{nfvo}}: is responsible for orchestrating and managing network functions across multiple \ac{vim} instances and ensuring the overall coordination of resources and services within the \ac{nfv} environment. It also handles policy-based resource optimization and \ac{sla} management.
 \end{itemize}
 
 The other components of the framework are the \ac{oss}/\ac{bss}, which allows for \ac{nfv} service providers to interact with the \ac{nfv} infrastructure, enabling service provisioning, billing, and customer management; the Service, \ac{vnf} and Infrastructure Descriptions, which contain templates/descriptors used internally within the \ac{nfvo} to be translated into functional blocks; and the \ac{ems} which manages the functionality of one or more \acp{vnf}. 
@@ -83,9 +118,37 @@ The other components of the framework are the \ac{oss}/\ac{bss}, which allows fo
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{figs/02/nfv-reference.png}
-    \caption{ETSI NFV reference architecture \cite{GSNFV002}}
+    \caption{ETSI NFV reference architecture \cite{ETSINetworkFunctionsVirtualisationNFVArchitectural2014}}
     \label{fig:nfv_reference_architecture}
 \end{figure}
+
+
+\section{Software Defined Networking}
+
+% shift to centralized network configuration
+The introduction of \ac{sdn} also marked a significant paradigm shift in mobile networks, introducing an abstractions towards a more centralized approach to the control of the network. In traditional networks with proprietary, hardware-locked functions, configuration and management of the network functions was often 
+
+% benefits and use cases
+
+
+% sdn architecture, controllers and switches
+
+
+\section{Network Slicing}
+
+% Network slicing in 5G-Advanced — 3GPP standards, isolation, E2E guarantees
+% https://youtu.be/SEL-9-P9J8A?si=Xc4_SKHD88VfUJGE
+
+% intro to slicing
+5G networks are expected to be able to provide optimized support for various types of communication services, with different \ac{kpi} requirements, and different end user communities. Rather than continuing with the 'one-size' fits all approach of the previous generations of networks, the 5G system shifted its design in order to be able to provide custom fitted solutions, each suited to the requirements of the customer vertical. 
+
+% what is a network slice
+A network slice is a logically separate, virtualized network carved out from a single physical network infrastructure, designed to meet the specific performance, security, and reliability requirements of different applications or users.
+
+% benefits and use cases
+
+
+\subsection{Network Slicing Architecture}
 
 
 \section{Multi-access Edge Computing}
@@ -102,12 +165,12 @@ High-level overview
 \subsection{MEC Reference Architecture}
 % TODO: refactor
 
-The reference architecture for \ac{mec}, as defined by \ac{etsi} in \ac{mec} \ac{gs} 03 \cite{GSMEC003}, is presented in Figure \ref{fig:mec_reference_architecture}. It shows the functional elements that comprise the \ac{mec} system, and the reference points between them.
+The reference architecture for \ac{mec}, as defined by \ac{etsi} in \ac{mec} \ac{gs} 03 \cite{ETSIMultiaccessEdgeComputingMECFramework2025}, is presented in Figure \ref{fig:mec_reference_architecture}. It shows the functional elements that comprise the \ac{mec} system, and the reference points between them.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{figs/02/mec-reference.png}
-    \caption{ETSI MEC reference architecture \cite{GSMEC003}}
+    \caption{ETSI MEC reference architecture \cite{ETSIMultiaccessEdgeComputingMECFramework2025}}
     \label{fig:mec_reference_architecture}
 \end{figure}
 
@@ -137,14 +200,6 @@ The Mm1 reference point connects the \ac{meo} to the operator's \ac{oss}, facili
 
 % oss
 The \ac{oss} is responsible for managing the \ac{mec} system's operational and business aspects, including service provisioning, billing, and customer management. It interacts with the \ac{meo} and \ac{mepm} to facilitate service instantiation, configuration, and monitoring, and receives requests from the \ac{cfs} via the Mm8 reference point for service delivery.
-
-\section{Network Slicing and Slice Mobility}
-
-Network slicing in 5G-Advanced — 3GPP standards, isolation, E2E guarantees
-% https://youtu.be/SEL-9-P9J8A?si=Xc4_SKHD88VfUJGE
-
-
-\subsection{Network Slicing Architecture}
 
 \section{Multi-domain Network Federation}
 
