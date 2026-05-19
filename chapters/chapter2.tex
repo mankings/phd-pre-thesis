@@ -1,15 +1,9 @@
-\chapter{Background and Related Work}
-\label{chap:background-related-work}
+\chapter{Background and Key Enablers}
+\label{chap:background-key-enablers}
 
 \begin{introduction}
-bnyx - go again
+This chapter goes over the different concepts and technologies that will enable the development 
 \end{introduction}
-
-setup: 5g is adopted and telco still looking to expand on costumer verticals 
-
-problem: 
-
-solution: multi-provider, distributed continum
 
 % Edge deployments exist and have hard constraints (MEC)
 % 5G lets us slice those resources with guarantees (Network Slicing)
@@ -130,26 +124,40 @@ The introduction of \ac{sdn} also marked a significant paradigm shift in mobile 
 
 % benefits and use cases
 
-
 % sdn architecture, controllers and switches
 
 
 \section{Network Slicing}
 
-% Network slicing in 5G-Advanced — 3GPP standards, isolation, E2E guarantees
-% https://youtu.be/SEL-9-P9J8A?si=Xc4_SKHD88VfUJGE
+The heterogeneous nature of 5G use cases imposes a fundamental tension on network design: the performance requirements of \ac{embb}, \ac{urllc}, and \ac{mmtc} services are not only distinct but often irreconcilable within a single, monolithic network configuration. A configuration tuned for peak throughput necessarily compromises the deterministic latency and reliability demanded by mission-critical applications, while one hardened for ultra-reliability wastes resources when serving bandwidth-intensive media services. Network slicing resolves this tension by enabling the concurrent operation of multiple logically isolated, independently configured network instances over a shared physical infrastructure, each optimized for the characteristics of its target service.
 
-% intro to slicing
-5G networks are expected to be able to provide optimized support for various types of communication services, with different \ac{kpi} requirements, and different end user communities. Rather than continuing with the 'one-size' fits all approach of the previous generations of networks, the 5G system shifted its design in order to be able to provide custom fitted solutions, each suited to the requirements of the customer vertical. 
+A network slice is an end-to-end logical network instance comprising a set of network functions and associated resources (compute, storage, and transport) configured and isolated to satisfy the specific \acp{kpi} of a given service or customer vertical. Each slice spans the full network stack, from the \ac{ran} through the transport domain to the 5G core, and is defined by a \ac{nst}, which captures the performance targets, resource budgets, and topology constraints that govern instantiation and operation. Slices are isolated from one another across the data, control, and management planes, ensuring that faults and congestion within one slice cannot propagate to others.
 
-% what is a network slice
-A network slice is a logically separate, virtualized network carved out from a single physical network infrastructure, designed to meet the specific performance, security, and reliability requirements of different applications or users.
-
-% benefits and use cases
-
+Network slicing introduces several capabilities over a monolithic network design \cite{3GPP5GSystemarchitecture5GSystem2026}:
+\begin{itemize}
+    \item \emph{Logical Isolation}: Each slice operates as an independent network instance, ensuring that traffic, faults, and resource contention within one slice do not affect others;
+    \item \emph{Customized \acp{qos}}: Slice-specific configurations enable delivery of differentiated service profiles tailored to each vertical, from high-bandwidth media delivery to ultra-reliable industrial control;
+    \item \emph{Multi-tenancy}: Multiple operators, enterprises, or service providers can share the same physical infrastructure while receiving logically dedicated resources and isolated management planes;
+    \item \emph{Rapid Service Deployment}: Slices can be instantiated, modified, and decommissioned programmatically through standardized interfaces, reducing the time-to-market for new services;
+    \item \emph{Efficient Resource Utilization}: Resources can be dynamically allocated and reallocated across slices according to demand, improving overall infrastructure efficiency compared to statically partitioned, purpose-built networks.
+\end{itemize}
 
 \subsection{Network Slicing Architecture}
 
+The management of network slices in the \ac{3gpp} architecture, as defined in TS 23.501 \cite{3GPP5GSystemarchitecture5GSystem2026}, is organized into three hierarchical functional layers:
+\begin{itemize}
+    \item \emph{\ac{csmf}}: translates high-level customer-facing service requirements into network slice requirements, acting as the interface between business intent and the network management plane;
+    \item \emph{\ac{nsmf}}: manages the lifecycle of \acp{nsi}, coordinating the instantiation and operation of constituent sub-slices and enforcing end-to-end \acp{sla};
+    \item \emph{\ac{nssmf}}: manages the lifecycle of individual \acp{nssi} within \ac{ran}, transport and core, allocating and configuring the specific resources required by each sub-slice.
+\end{itemize}
+
+Network slices are identified through the \ac{nssai}, a collection of one or more \acp{snssai}. Each \ac{snssai} comprises two fields: the \ac{sst}, which encodes the service category, and an optional \ac{sd}, which allows operators to differentiate among multiple slices of the same service type. The \ac{3gpp} specification standardizes four \ac{sst} values: \ac{embb} (1), \ac{urllc} (2), \ac{mmtc} (3), and \ac{v2x} (4). The 24-bit \ac{sd} field provides an operator-defined namespace for further differentiation.
+
+Slice selection is handled at registration time. The \ac{ue} includes a requested \ac{nssai} in its registration request, which the \ac{amf} forwards to the \ac{nssf}. The \ac{nssf} evaluates the request against the \ac{ue}'s subscription profile, operator policy, and current resource availability, returning an allowed \ac{nssai} and, where necessary, a redirection to an \ac{amf} set associated with the target \ac{nsi}.
+
+An end-to-end \ac{nsi} is composed of multiple \acp{nssi}, one per network domain - \ac{ran}, transport and core. The \ac{ran} sub-slice configures the radio resources and \ac{ran} functions assigned to the slice; the transport sub-slice establishes the connectivity between the \ac{ran} and the core; the core sub-slice instantiates the relevant 5G core network functions with the appropriate configurations and policies. Sub-slices may be shared across multiple \acp{nsi} where isolation requirements permit, enabling more efficient use of underlying resources.
+
+The lifecycle of a network slice spans five phases: preparation, in which the \ac{nst} is onboarded and feasibility is verified; instantiation, in which the constituent \acp{nssi} are created and configured; activation, in which the slice begins carrying live traffic; operation, in which the slice is continuously monitored and dynamically adapted to changing demand; and decommissioning, in which the slice is gracefully terminated and its resources released. Lifecycle management is coordinated between the \ac{nsmf} and the domain-specific \ac{nssmf} instances, following the interface specifications defined in 3GPP TS 28.530 \cite{3GPP5GProcedures5GSystem5GS2026}.
 
 \section{Multi-access Edge Computing}
 
