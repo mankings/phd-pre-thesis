@@ -119,12 +119,39 @@ The other components of the framework are the \ac{oss}/\ac{bss}, which allows fo
 
 \section{Software Defined Networking}
 
-% shift to centralized network configuration
-The introduction of \ac{sdn} also marked a significant paradigm shift in mobile networks, introducing an abstractions towards a more centralized approach to the control of the network. In traditional networks with proprietary, hardware-locked functions, configuration and management of the network functions was often 
+Traditional network architectures embed control logic directly into each forwarding device. Routing decisions, forwarding table computation, and policy enforcement are distributed across proprietary hardware, each managed independently through vendor-specific interfaces. This approach yields no global view of network state, requires per-device configuration, and makes network-wide adaptation to traffic demands or failures slow and operationally expensive.
 
-% benefits and use cases
+\ac{sdn} addresses these limitations by decoupling the \emph{control plane}, responsible for computing forwarding decisions and enforcing network-wide policies, from the \emph{data plane}, responsible for packet forwarding. Network intelligence is consolidated in a logically centralized controller, which maintains a global view of the network topology and programs forwarding behavior across the infrastructure through standardized interfaces. This separation transforms the network into a programmable, software-driven resource that can be dynamically configured to meet changing service demands.
 
-% sdn architecture, controllers and switches
+\ac{sdn} introduces several capabilities over traditional distributed architectures:
+\begin{itemize}
+    \item \emph{Centralized Control}: A global network view allows the controller to enforce consistent, coordinated policies across the entire infrastructure, enabling network-wide optimizations that are impractical when control is distributed across independent devices;
+    \item \emph{Programmability}: Network behavior can be defined and modified through software interfaces, enabling dynamic reconfiguration in response to load, failure, or policy changes without manual per-device intervention;
+    \item \emph{Vendor Agnosticism}: Standardized southbound interfaces allow the controller to interact with forwarding devices from heterogeneous vendors using a common protocol, reducing dependency on proprietary hardware and vendor lock-in;
+    \item \emph{Dynamic Traffic Management}: The controller can reroute flows in real time based on current network conditions, application requirements, or operator-defined policies, enabling traffic engineering capabilities not available in distributed architectures;
+    \item \emph{Network Automation}: By exposing network resources through programmable \acp{api}, \ac{sdn} enables integration with higher-level orchestration systems, supporting automated provisioning, lifecycle management, and coordination with complementary frameworks such as \ac{nfv}.
+\end{itemize}
+
+\subsection{SDN Architecture}
+
+Figure \ref{fig:sdn_architecture} shows an overview of the \ac{sdn} architecture, which is organized into three functional layers, each communicating through standardized interfaces.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/02/sdn.pdf}
+    \caption{SDN three-layer architecture (adapted from \cite{ONFSoftwareDefinedNetworksNewNorm2012})}
+    \label{fig:sdn_architecture}
+\end{figure}
+
+The infrastructure layer comprises the physical and virtual forwarding devices that constitute the data plane. These devices do not compute forwarding decisions autonomously; instead, they execute flow rules programmed by the controller, matching incoming packets against installed entries and applying the associated forwarding, dropping, or marking actions defined in their flow tables.
+
+The control layer hosts the \ac{sdn} controller, which maintains a logically centralized, real-time model of the network topology and computes forwarding policies on behalf of the infrastructure devices. The controller translates high-level intents into low-level flow rules and disseminates these rules to the appropriate forwarding elements. Widely adopted open-source controller implementations include ONOS and OpenDaylight, both of which provide extensible platforms for building network control applications.
+
+The application layer contains network applications that consume the controller's abstractions to implement higher-order network behaviors, such as load balancing, traffic engineering, access control, and network slice management. Applications interact with the controller without requiring knowledge of the underlying hardware topology or forwarding mechanisms.
+
+These layers communicate through three categories of interface. The southbound interface connects the controller to infrastructure devices; OpenFlow is the dominant protocol, defining the message format and procedure for installing, modifying, and querying flow tables on forwarding elements. The northbound interface exposes the controller's network model and programming capabilities to applications, typically through REST \acp{api} or intent-based abstractions; no single standard governs this interface, and implementations vary across controller platforms. An east-west interface can also be considered, enabling coordination between multiple controller instances and supporting distributed or hierarchical controller deployments where no single instance maintains a complete view of a large-scale network.
+
+Within the \ac{5g} architecture, \ac{sdn} principles are directly reflected in the design of the \ac{upf}, whose forwarding behavior is programmatically controlled by the \ac{smf} through the N4 interface. This design applies the same control/data plane separation that defines \ac{sdn} natively within the 5G core, enabling per-session traffic steering, \ac{qos} enforcement, and data path programmability without relying on static, hardware-bound forwarding configurations.
 
 
 \section{Network Slicing}
@@ -186,7 +213,7 @@ The reference architecture for \ac{mec}, as defined by \ac{etsi} in MEC GS 003 \
 
 The \ac{meh} comprises two co-located components: the \ac{mep} and the \ac{vi}. The \ac{vi} provides the compute, storage, and networking substrate on which \ac{mec} applications execute, and includes a data plane responsible for enforcing traffic rules and routing flows among applications, services, and external networks. The \ac{mep} operates above the \ac{vi}, providing the service environment through which applications discover and consume \ac{mec} services, register their resource requirements, and interact with the broader network. Specifically, the \ac{mep} manages traffic rules, configures \ac{dns}, and hosts platform-level services such as location and radio network information.
 
-\ac{mec} applications execute as virtualized entities — containers or virtual machines — within the \ac{meh}. Their interaction with the \ac{mep} and with one another is governed by three reference points: Mp1 connects applications to the \ac{mep}, enabling service registration and discovery, traffic rule activation, and session state relocation in response to mobility events; Mp2 connects the \ac{mep} to the \ac{vi} data plane, allowing the platform to steer traffic flows among applications, services, and external interfaces; Mp3 enables inter-platform communication between \ac{mep} instances on separate hosts, supporting coordinated service delivery across distributed deployments.
+\ac{mec} applications execute as virtualized entities (containers or virtual machines) within the \ac{meh}. Their interaction with the \ac{mep} and with one another is governed by three reference points: Mp1 connects applications to the \ac{mep}, enabling service registration and discovery, traffic rule activation, and session state relocation in response to mobility events; Mp2 connects the \ac{mep} to the \ac{vi} data plane, allowing the platform to steer traffic flows among applications, services, and external interfaces; Mp3 enables inter-platform communication between \ac{mep} instances on separate hosts, supporting coordinated service delivery across distributed deployments.
 
 The \ac{mec} Management system is organized into two tiers. At the system level, the \ac{meo} maintains a global view of deployed hosts, available resources, and accessible services, and is responsible for the end-to-end lifecycle of \ac{mec} applications — including onboarding, instantiation, and termination — as well as application relocation decisions across hosts. At the host level, the \ac{mepm} manages the operational lifecycle of applications on a single host, handling rule enforcement, conflict resolution, and \ac{dns} configuration, while the \ac{vim} allocates, monitors, and releases the virtualized resources required by those applications, reporting performance metrics and fault conditions to the \ac{mepm}.
 
@@ -200,9 +227,3 @@ These management functions interact through a set of Mm reference points. Mm1 co
 % gsma ewbi
 % mec federation 
 
-
-% \section{Application scenarios and operational context}
-
-% High-density transient deployments — smart stadiums, crowd analytics, event networks
-% PPDR networks — cross-border interoperability, first responder operational mobility
-% Summary of open challenges and research gaps addressed by this thesis
