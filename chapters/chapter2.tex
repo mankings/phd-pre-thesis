@@ -161,19 +161,21 @@ The lifecycle of a network slice spans five phases: preparation, in which the \a
 
 \section{Multi-access Edge Computing}
 
-% intro and driving factorss
-The centralized cloud approach still presented challenges for latency-sensitive applications. This gave rise to \ac{mec}, 
+The centralized cloud model shows a fundamental limitation when dealing with the deployment of latency-sensitive applications, such as from real-time video analytics and augmented reality to industrial automation and autonomous vehicle coordination, exposes a fundamental limitation of the centralized cloud model. By concentrating compute and storage in geographically distant data centers, the cloud introduces round-trip latencies on the order of tens of milliseconds, even under ideal network conditions. For applications that require deterministic, sub-millisecond response at the point of access, this architectural gap is not merely a performance constraint but a functional barrier.
 
-The traditional Cloud Computing approach centralizes compute and storage resources in far away data centers
+\ac{mec}, standardized by \ac{etsi} \cite{ETSIMultiaccessEdgeComputingMECFramework2025}, resolves this tension by extending cloud-computing capabilities to the edge of the \ac{ran}, co-locating compute, storage, and networking resources in direct proximity to the \ac{ue}. This placement eliminates the backhaul round-trip to the core, enabling service execution at or near the base station. By exposing these resources to authorized applications through standardized \acp{api}, \ac{mec} transforms the network edge from a passive radio access point into an active, programmable service execution environment.
 
-Edge provides these resources at the network edge, accessible fron the ran
-
-High-level overview
+\ac{mec} introduces several capabilities that are impractical within a purely centralized architecture:
+\begin{itemize}
+    \item \emph{Ultra-Low Latency}: Application execution at the network edge eliminates the round-trip to centralized data centers, enabling response times compatible with real-time and mission-critical use cases;
+    \item \emph{Backhaul Offload}: Local processing of traffic at the edge reduces upstream bandwidth consumption, alleviating congestion on backhaul links and improving overall network efficiency;
+    \item \emph{Data Locality}: Processing data in proximity to its source allows operators and enterprises to enforce data residency and sovereignty requirements without routing sensitive information to remote infrastructure;
+    \item \emph{Application Mobility}: \ac{mec} supports the live relocation of application instances across hosts in response to \ac{ue} mobility, preserving service continuity without interruption.
+\end{itemize}
 
 \subsection{MEC Reference Architecture}
-% TODO: refactor
 
-The reference architecture for \ac{mec}, as defined by \ac{etsi} in \ac{mec} \ac{gs} 03 \cite{ETSIMultiaccessEdgeComputingMECFramework2025}, is presented in Figure \ref{fig:mec_reference_architecture}. It shows the functional elements that comprise the \ac{mec} system, and the reference points between them.
+The reference architecture for \ac{mec}, as defined by \ac{etsi} in MEC GS 003 \cite{ETSIMultiaccessEdgeComputingMECFramework2025}, is presented in Figure \ref{fig:mec_reference_architecture}. The architecture is organized into two principal domains: the \ac{meh}, which hosts applications and exposes platform services, and the \ac{mec} Management system, which governs the lifecycle of applications and the allocation of resources across the deployment.
 
 \begin{figure}[ht]
     \centering
@@ -182,36 +184,21 @@ The reference architecture for \ac{mec}, as defined by \ac{etsi} in \ac{mec} \ac
     \label{fig:mec_reference_architecture}
 \end{figure}
 
-% mec host
-The \ac{meh} comprises the \ac{mep} and the \ac{vi} that provides the computing, storage and networking resources necessary for the deployment and operation of \ac{mec} applications. The virtualization infrastructure includes a data plane that facilitates the execution of traffic rules and ensures seamless routing among applications, services, and networks.
+The \ac{meh} comprises two co-located components: the \ac{mep} and the \ac{vi}. The \ac{vi} provides the compute, storage, and networking substrate on which \ac{mec} applications execute, and includes a data plane responsible for enforcing traffic rules and routing flows among applications, services, and external networks. The \ac{mep} operates above the \ac{vi}, providing the service environment through which applications discover and consume \ac{mec} services, register their resource requirements, and interact with the broader network. Specifically, the \ac{mep} manages traffic rules, configures \ac{dns}, and hosts platform-level services such as location and radio network information.
 
-% mec platform
-The \ac{mep} is designed to enable the discovery, advertisement, and consumption of \ac{mec} services by applications. It performs several key functions, such as managing traffic rules, configuring \ac{dns} services, and hosting \ac{mec}-specific services.
+\ac{mec} applications execute as virtualized entities — containers or virtual machines — within the \ac{meh}. Their interaction with the \ac{mep} and with one another is governed by three reference points: Mp1 connects applications to the \ac{mep}, enabling service registration and discovery, traffic rule activation, and session state relocation in response to mobility events; Mp2 connects the \ac{mep} to the \ac{vi} data plane, allowing the platform to steer traffic flows among applications, services, and external interfaces; Mp3 enables inter-platform communication between \ac{mep} instances on separate hosts, supporting coordinated service delivery across distributed deployments.
 
-% mec applications
-\ac{mec} applications operate as virtualized entities (e.g., containers or virtual machines) within the \ac{mec} host. They rely on the \ac{mep} to access essential services, register their requirements and interact with other applications or external systems. The \ac{mep} validates and manages the application requirements, ensuring compliance with resource constraints and operator policies.
+The \ac{mec} Management system is organized into two tiers. At the system level, the \ac{meo} maintains a global view of deployed hosts, available resources, and accessible services, and is responsible for the end-to-end lifecycle of \ac{mec} applications — including onboarding, instantiation, and termination — as well as application relocation decisions across hosts. At the host level, the \ac{mepm} manages the operational lifecycle of applications on a single host, handling rule enforcement, conflict resolution, and \ac{dns} configuration, while the \ac{vim} allocates, monitors, and releases the virtualized resources required by those applications, reporting performance metrics and fault conditions to the \ac{mepm}.
 
-% reference points for host
-The functionalities described above are supported by well-defined reference points. The Mp1 reference point establishes a connection between the \ac{mep} and \ac{mec} applications, enabling service registration, discovery, and communication. Through Mp1, \ac{mec} applications can also activate traffic rules and facilitate session state relocation when required. Mp2 connects the \ac{mep} to the \ac{vi}'s data plane. This connection allows the \ac{mep} to control how traffic is routed among applications, networks, and other services. The Mp3 reference point facilitates communication between different \ac{mep} platforms. 
-
-% mec management
-The management of these components is split between two primary levels: host-level management and system-level management. Host-level management is responsible for managing the individual \ac{mec} host resources, while system-level management is responsible for managing the \ac{mec} system as a whole.
-
-% mec orchestrator
-The \ac{meo} is responsible for the system-level management of the \ac{mec} system, overseeing deployed hosts, available resources, and accessible services. It handles application \ac{lcm}, such as onboarding, instantiation, and termination of \ac{mec} applications. It also manages application relocation across hosts when required, ensuring optimal service delivery and resource utilization.
-
-% mec platform manager and vi manager
-The host-level management is handled by the \ac{mepm} and the \ac{vim}. The \ac{mepm} oversees the lifecycle of applications, handling tasks such as rule enforcement, conflict resolution, and \ac{dns} configuration. It ensures seamless integration and operation of applications with the \ac{mep}. The \ac{vim} allocates, monitors, and releases the virtualized resources required for hosting \ac{mec} applications. It also reports performance metrics and fault conditions to the \ac{mepm}, facilitating efficient resource management.
-
-% reference points for management
-The Mm1 reference point connects the \ac{meo} to the operator's \ac{oss}, facilitating application instantiation and termination requests. Mm2 links the \ac{oss} to the \ac{mepm} for platform configuration, fault management, and performance monitoring. Additionally, the Mm3 reference point enables direct communication between the \ac{meo} and the \ac{mepm}, streamlining application \ac{lcm} and service coordination. The Mm4 reference point links the \ac{meo} to the \ac{vim}, ensuring effective allocation and tracking of virtualized resources. Mm5, on the other hand, connects the \ac{mepm} with the \ac{mep}, supporting configuration, lifecycle support, and application relocation procedures. Other reference points, such as Mm6 and Mm7, further extend the interaction between \ac{mepm}, \ac{vim} and \ac{vi} to manage resources and optimize application deployment.
-
-% oss
-The \ac{oss} is responsible for managing the \ac{mec} system's operational and business aspects, including service provisioning, billing, and customer management. It interacts with the \ac{meo} and \ac{mepm} to facilitate service instantiation, configuration, and monitoring, and receives requests from the \ac{cfs} via the Mm8 reference point for service delivery.
+These management functions interact through a set of Mm reference points. Mm1 connects the \ac{meo} to the operator's \ac{oss}, enabling application instantiation and termination requests to be submitted from the operational layer. Mm3 links the \ac{meo} to the \ac{mepm} for application lifecycle coordination and service management. Mm4 connects the \ac{meo} to the \ac{vim} for resource allocation and tracking at the host level. Mm5 links the \ac{mepm} to the \ac{mep}, supporting platform configuration, lifecycle support, and application relocation procedures. Mm2, Mm6, and Mm7 extend these interactions between the \ac{oss}, \ac{mepm}, \ac{vim}, and \ac{vi} for configuration, fault management, and performance monitoring. The \ac{oss} bridges the operational and business layers of the system, managing service provisioning, billing, and customer management, and receiving service delivery requests from the \ac{cfs} via the Mm8 reference point.
 
 \section{Multi-domain Network Federation}
 
+% concept of federation
 
+
+% gsma ewbi
+% mec federation 
 
 
 % \section{Application scenarios and operational context}
