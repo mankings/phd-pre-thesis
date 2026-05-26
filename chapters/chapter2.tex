@@ -2,7 +2,7 @@
 \label{chap:background-key-enablers}
 
 \begin{introduction}
-This chapter introduces the key technologies underpinning this work. It begins with 5G networks and their architectural evolution toward 6G, then covers \ac{nfv} and \ac{sdn} as the programmability substrate, Network Slicing as the multi-service isolation mechanism, and \ac{mec} as the edge execution model. It closes with an overview of multi-domain federation and its open challenges.
+This chapter introduces the key technologies underpinning this work. It begins with 5G networks and their architectural evolution toward 6G, then covers \ac{nfv} and \ac{sdn} as the programmability facilitators, Network Slicing as the multi-service isolation mechanism, and \ac{mec} as the edge execution model. It closes with an overview of multi-domain federation and its open challenges.
 \end{introduction}
 
 % Edge deployments exist and have hard constraints (MEC)
@@ -21,14 +21,22 @@ This chapter introduces the key technologies underpinning this work. It begins w
 
 \section{5G Networks}
 
-Until \ac{5g}, each successive generation of mobile networks delivered incremental gains in throughput and reach while preserving the same fundamental paradigm: a purpose-built, hardware-centric network optimized for a single dominant use case. \ac{5g} breaks from this pattern. Rather than simply extending data rates, 5G was designed from the ground up as a programmable, multi-service platform capable of simultaneously serving heterogeneous vertical industries with vastly different performance requirements.
+Until \ac{5g}, each successive generation of mobile networks delivered incremental gains in throughput and reach while preserving the same fundamental paradigm: a purpose-built, hardware-centric network optimized for a single traffic type. 5G was designed from the ground up as a programmable, multi-service platform capable of simultaneously serving heterogeneous vertical industries with vastly different performance requirements, instead of simply aiming to increase throughput and extend data rates \cite{ZieglerArchitecturevision5Gera2016}.
 
 To address these diverse requirements, the ITU-R IMT-2020 framework defined three canonical usage scenarios: \ac{embb}, targeting peak data rates in the tens of gigabits per second; \ac{urllc}, targeting sub-millisecond latency and near-perfect reliability for mission-critical applications; and \ac{mmtc}, supporting connection densities of up to one million devices per square kilometer for \ac{iot} deployments \cite{IMTFrameworkoverallobjectivesfuturedevelopment2015}. The 5G system achieves this flexibility through the adoption of key enabling technologies such as \ac{nfv}, \ac{sdn}, Network Slicing, and \ac{mec}, that transform the network into a software-defined, service-based, distributed infrastructure \cite{HermosillaDeployment5GNetworkApplicationsMultidomain2022, antonyfranklin2020MultiaccessEdgeComputing}.
 
 % 5g arch
-Figure \ref{fig:5g_architecture} shows the reference architecture for the service-based architecture of the \ac{5g} core, where each function exposes REST-based \acp{api} over the Service-Based Interface. The upper functions belong to the control plane, while the bottom functions relate to the user plane.
+Figure \ref{fig:5g_architecture} shows the reference architecture for the service-based architecture of the \ac{5g} core, where each function exposes REST-based \acp{api} over the Service-Based Interface. The upper functions belong to the control plane, while the bottom functions relate to the user plane. 
 
-The most relevant network functions of the \ac{5g} core are as follows:
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/02/5g-reference.png}
+    \caption{5G Core Service Based Architecture \cite{3GPP5GSystemarchitecture5GSystem2026}}
+    \label{fig:5g_architecture}
+\end{figure}
+
+The most relevant network functions of the \ac{5g} core are briefly described as follows \cite{3GPP5GSystemarchitecture5GSystem2026}:
+
 \begin{itemize}
     \item The \ac{upf} is responsible for user plane packet handling such as routing/forwarding, marking and \ac{qos} enforcing;
     \item The \ac{amf} manages registration, connection, mobility management and authorization and authentication;
@@ -43,13 +51,7 @@ The most relevant network functions of the \ac{5g} core are as follows:
     \item The \ac{af} represents external or operator applications which are able to interact with the \ac{5g} core via the \ac{nef}.
 \end{itemize}
 
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figs/02/5g-reference.png}
-    \caption{5G Service Based Architecture \cite{3GPP5GSystemarchitecture5GSystem2026}}
-    \label{fig:5g_architecture}
-\end{figure}
+Complementing the core, the \ac{ran} is responsible for the radio interface between \acp{ue} and the network, handling wireless transmission, scheduling, and handover. In the 5G architecture, the \ac{ran} is realized by \acp{gnb}, which connect to the core via the NG interface and to one another via the Xn interface for mobility coordination \cite{3GPPNGRANArchitecturedescription}.
 
 \subsection{5G-Advanced and the 6G Vision}
 
@@ -71,15 +73,20 @@ The ITU-R defines six usage scenarios for IMT-2030, expanding upon the three sce
 \section{Network Functions Virtualization}
 
 % intro and driving factors
-Traditional network architectures relied heavily on proprietary hardware appliances for each specific function, such as firewalls, routers, and load balancers. These hardware-based solutions are not only costly but also inflexible, making it challenging to scale and adapt to dynamic network demands. 
+Traditional network architectures relied heavily on proprietary hardware appliances for each specific function, such as firewalls, routers, and load balancers. These hardware-based solutions are not only costly but also inflexible, making it challenging to scale and adapt to dynamic network demands \cite{ChiosiNetworkFunctionsVirtualisationIntroductionBenefits}. 
 
-\ac{nfv} allowed the transition from hardware-dependent network functions to virtualized software solutions. By leveraging virtualization techniques, \ac{nfv} allows for dynamic deployment of various network functions on \ac{cots} hardware as \acp{vnf}. This approach decouples the functions of the network from proprietary hardware, enabling them to run on standard servers, storage, and networking equipment.
+% core concept
+\ac{nfv} allowed the transition from hardware-dependent network functions to virtualized software solutions. By leveraging virtualization techniques, \ac{nfv} allows for dynamic deployment and lifecycle management of various network functions on \ac{cots} hardware as \acp{vnf}. This approach decouples the functions of the network from proprietary hardware, enabling them to run on standard servers, storage, and networking equipment.
 
+% advantages
 \ac{nfv} brings several advantages over hardware-centric approaches \cite{ETSINetworkFunctionsVirtualisationNFVArchitectural2014}. \acp{vnf} run on \ac{cots} hardware, eliminating dependency on proprietary appliances and reducing both capital and operational expenditure. Functions can be deployed, scaled, and relocated dynamically across geographically distributed sites, enabling a degree of flexibility that static hardware cannot match. Standardized, open interfaces promote a multi-vendor ecosystem where \acp{vnf} and infrastructure components from different providers can coexist, and the rapid instantiation of new services reduces time-to-market significantly.
 
-\subsection{NFV Reference Architecturxe}
+% cnf shoutout
+In the recent years, the dominant virtualization technologies have since shifted from hypervisor-managed virtual machines to containers orchestrated by platforms such as Docker\footnote{https://www.docker.com/} and Kubernetes\footnote{https://kubernetes.io/}, giving rise to \acp{cnf}: network functions decomposed into microservices and managed through cloud-native orchestration primitives. Container-based deployments offer lower per-instance overhead, faster startup times, and compatibility with \ac{cicd} deployment workflows \cite{ValantasisExperimentalEvaluationOrchestrationSoftwareVirtual2021}.
 
-Figure \ref{fig:nfv_reference_architecture} presents the \ac{etsi} \ac{nfv} reference architecture, which organises the framework into three top-level domains --- \acp{vnf}, \ac{nfvi}, and \ac{mano} --- and exposes the internal components that realise each. \acp{vnf} are software implementations of network functions that execute on \ac{nfvi} resources; the \ac{nfvi} encompasses the compute, storage, and networking hardware and software that host them. The \ac{mano} domain coordinates the lifecycle of both, and is itself subdivided into three building blocks:
+\subsection{NFV Reference Architecture}
+
+Figure \ref{fig:nfv_reference_architecture} presents the \ac{etsi} \ac{nfv} reference architecture, which organises the framework into three main domains: the \acp{vnf}, the \ac{nfvi}, and the \ac{mano}. \acp{vnf} are software implementations of network functions that execute on \ac{nfvi} resources; the \ac{nfvi} encompasses the compute, storage, and networking hardware and software that host them. The \ac{mano} domain coordinates the lifecycle of both \acp{vnf} and \ac{nfvi} resources, and is itself subdivided into three building blocks:
 
 \begin{itemize}
     \item \emph{\acp{vnfm}}: responsible for managing the lifecycle of \acp{vnf}, including instantiation, scaling, updating, and termination. It interacts with both the \ac{vim} and \ac{nfvo} to ensure the \ac{vnf} operates as intended within the \ac{nfv} infrastructure.
@@ -91,17 +98,18 @@ The other components of the framework are the \ac{oss}/\ac{bss}, which allows fo
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{figs/02/nfv-reference.png}
+    \includegraphics[width=0.9\textwidth]{figs/02/nfv-reference.png}
     \caption{ETSI NFV reference architecture \cite{ETSINetworkFunctionsVirtualisationNFVArchitectural2014}}
     \label{fig:nfv_reference_architecture}
 \end{figure}
+
 
 
 \section{Software Defined Networking}
 
 In conventional network architectures, routing decisions, forwarding table computation, and policy enforcement are embedded within each device and managed independently through vendor-specific interfaces. With no global view of network state and per-device configuration as the only operational primitive, adapting to traffic demands or failures is slow and costly.
 
-\ac{sdn} addresses these limitations by decoupling the control plane, responsible for computing forwarding decisions and enforcing network-wide policies, from the data plane, responsible for packet forwarding. Network intelligence is consolidated in a logically centralized controller, which maintains a global view of the network topology and programs forwarding behavior across the infrastructure through standardized interfaces. This separation transforms the network into a programmable, software-driven resource that can be dynamically configured to meet changing service demands. By holding a consistent model of the full topology, the controller enables network-wide optimizations, such as coordinated policy enforcement, real-time flow rerouting, and automated provisioning, that are impractical when control is fragmented across independent devices . Furthermore, standardized southbound interfaces allow the controller to manage forwarding elements from heterogeneous vendors, and northbound \acp{api} expose network resources to higher-level orchestration systems, enabling tight coordination with complementary frameworks such as \ac{nfv}.
+\ac{sdn} addresses these limitations by decoupling the control plane, responsible for computing forwarding decisions and enforcing network-wide policies, from the data plane, responsible for packet forwarding. Network intelligence is consolidated in a logically centralized controller, which maintains a global view of the network topology and programs forwarding behavior across the infrastructure through standardized interfaces. This separation transforms the network into a programmable, software-driven resource that can be dynamically configured to meet changing service demands. By holding a consistent model of the full topology, the controller enables network-wide optimizations, such as coordinated policy enforcement, real-time flow rerouting, and automated provisioning, that are impractical when control is fragmented across independent devices. Furthermore, standardized southbound interfaces allow the controller to manage forwarding elements from heterogeneous vendors, and northbound \acp{api} expose network resources to higher-level orchestration systems, enabling tight coordination with complementary frameworks such as \ac{nfv}.
 
 Beyond these core properties, \ac{sdn} enables:
 \begin{itemize}
@@ -138,6 +146,13 @@ The heterogeneous nature of 5G use cases imposes a fundamental tension on networ
 
 A network slice is an end-to-end logical network instance comprising a set of network functions and associated resources (compute, storage, and transport) configured and isolated to satisfy the specific \acp{kpi} of a given service or customer vertical. Each slice spans the full network stack, from the \ac{ran} through the transport domain to the 5G core, and is defined by a \ac{nst}, which captures the performance targets, resource budgets, and topology constraints that govern instantiation and operation. Slices are isolated from one another across the data, control, and management planes, ensuring that faults and congestion within one slice cannot propagate to others.
 
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.85\textwidth]{figs/02/network-slicing-concept.pdf}
+    \caption{Network slicing concept: multiple isolated logical networks over shared physical infrastructure, enabled by \ac{nfv} (per-slice \ac{vnf} instances) and \ac{sdn} (per-slice flow isolation).}
+    \label{fig:network_slicing_concept}
+\end{figure}
+
 From an operational standpoint, slicing yields several properties that a monolithic design cannot provide \cite{3GPP5GSystemarchitecture5GSystem2026}:
 \begin{itemize}
     \item \emph{Logical Isolation}: Each slice operates as an independent network instance, ensuring that traffic, faults, and resource contention within one slice do not affect others;
@@ -147,7 +162,7 @@ From an operational standpoint, slicing yields several properties that a monolit
     \item \emph{Efficient Resource Utilization}: Resources can be dynamically allocated and reallocated across slices according to demand, improving overall infrastructure efficiency compared to statically partitioned, purpose-built networks.
 \end{itemize}
 
-Network slicing is not an independent abstraction but is technically realized through the joint application of \ac{nfv} and \ac{sdn}. \ac{nfv} provides the virtualization substrate that enables per-slice network function instances to be created, configured, and terminated on shared \ac{cots} hardware. Without \ac{nfv}, deploying independent function sets per slice would require dedicated physical appliances for each service type, negating the shared-infrastructure principle that slicing depends upon. The \ac{nfvo} and \ac{vnfm} components of the \ac{mano} framework orchestrate the lifecycle of these per-slice \acp{vnf}, while the \ac{vim} allocates and tracks the compute, storage, and networking resources budgeted to each slice instance.
+Network slicing is not an independent abstraction but is technically realized through the joint application of \ac{nfv} and \ac{sdn}. \ac{nfv} provides the virtualization layer that enables per-slice network function instances to be created, configured, and terminated on shared \ac{cots} hardware. Without \ac{nfv}, deploying independent function sets per slice would require dedicated physical appliances for each service type, negating the shared-infrastructure principle that slicing depends upon. The \ac{nfvo} and \ac{vnfm} components of the \ac{mano} framework orchestrate the lifecycle of these per-slice \acp{vnf}, while the \ac{vim} allocates and tracks the compute, storage, and networking resources budgeted to each slice instance.
 
 \ac{sdn} complements this by enforcing per-slice traffic isolation and steering in the data plane. The \ac{sdn} controller programs forwarding rules that segregate slice-specific flows across the shared physical underlay, and enforces policies that prevent cross-slice interference at the transport layer. This mechanism extends the control/data plane separation already present in the 5G core (where the \ac{smf} programs the \ac{upf} via the N4 interface) to an end-to-end scope spanning the \ac{ran}, transport, and core simultaneously.
 
@@ -155,9 +170,9 @@ Together, \ac{nfv} governs the function plane (instantiation, scaling, and termi
 
 \begin{figure}[ht]
     \centering
-    % \includegraphics[width=0.85\textwidth]{figs/02/network-slicing-concept.pdf}
-    \caption{Network slicing concept: multiple isolated logical networks over shared physical infrastructure, enabled by \ac{nfv} (per-slice \ac{vnf} instances) and \ac{sdn} (per-slice flow isolation).}
-    \label{fig:network_slicing_concept}
+    % \includegraphics[width=0.85\textwidth]{figs/02/network-slicing-management.pdf}
+    \caption{Network slicing management}
+    \label{fig:network_slicing_management}
 \end{figure}
 
 \subsection{Network Slicing Architecture}
@@ -175,7 +190,7 @@ Slice selection is handled at registration time. The \ac{ue} includes a requeste
 
 An end-to-end \ac{nsi} is composed of multiple \acp{nssi}, one per network domain - \ac{ran}, transport and core. The \ac{ran} sub-slice configures the radio resources and \ac{ran} functions assigned to the slice; the transport sub-slice establishes the connectivity between the \ac{ran} and the core; the core sub-slice instantiates the relevant 5G core network functions with the appropriate configurations and policies. Sub-slices may be shared across multiple \acp{nsi} where isolation requirements permit, enabling more efficient use of underlying resources.
 
-The lifecycle of a network slice spans five phases: preparation, in which the \ac{nst} is onboarded and feasibility is verified; instantiation, in which the constituent \acp{nssi} are created and configured; activation, in which the slice begins carrying live traffic; operation, in which the slice is continuously monitored and dynamically adapted to changing demand; and decommissioning, in which the slice is gracefully terminated and its resources released. Lifecycle management is coordinated between the \ac{nsmf} and the domain-specific \ac{nssmf} instances, following the interface specifications defined in 3GPP TS 28.530 \cite{3GPP5GProcedures5GSystem5GS2026}.
+The lifecycle of a network slice spans five phases: preparation, in which the \ac{nst} is onboarded and feasibility is verified; instantiation, in which the constituent \acp{nssi} are created and configured; activation, in which the slice begins carrying live traffic; operation, in which the slice is continuously monitored and dynamically adapted to changing demand; and decommissioning, in which the slice is gracefully terminated and its resources released. Lifecycle management is coordinated between the \ac{nsmf} and the domain-specific \ac{nssmf} instances, following the interface specifications defined in 3GPP TS 28.530 \cite{3GPP5GManagementorchestrationConceptsuse2026}.
 
 
 \section{Multi-access Edge Computing}
@@ -202,7 +217,7 @@ The reference architecture for \ac{mec}, as defined by \ac{etsi} in MEC GS 003 \
     \label{fig:mec_reference_architecture}
 \end{figure}
 
-The \ac{meh} comprises two co-located components: the \ac{mep} and the \ac{vi}. The \ac{vi} provides the compute, storage, and networking substrate on which \ac{mec} applications execute, and includes a data plane responsible for enforcing traffic rules and routing flows among applications, services, and external networks. The \ac{mep} operates above the \ac{vi}, providing the service environment through which applications discover and consume \ac{mec} services, register their resource requirements, and interact with the broader network. Specifically, the \ac{mep} manages traffic rules, configures \ac{dns}, and hosts platform-level services such as location and radio network information.
+The \ac{meh} comprises two co-located components: the \ac{mep} and the \ac{vi}. The \ac{vi} provides the compute, storage, and networking resources on which \ac{mec} applications execute, and includes a data plane responsible for enforcing traffic rules and routing flows among applications, services, and external networks. The \ac{mep} operates above the \ac{vi}, providing the service environment through which applications discover and consume \ac{mec} services, register their resource requirements, and interact with the broader network. Specifically, the \ac{mep} manages traffic rules, configures \ac{dns}, and hosts platform-level services such as location and radio network information.
 
 \ac{mec} applications execute as virtualized entities (containers or virtual machines) within the \ac{meh}. Their interaction with the \ac{mep} and with one another is governed by three reference points: Mp1 connects applications to the \ac{mep}, enabling service registration and discovery, traffic rule activation, and session state relocation in response to mobility events; Mp2 connects the \ac{mep} to the \ac{vi} data plane, allowing the platform to steer traffic flows among applications, services, and external interfaces; Mp3 enables inter-platform communication between \ac{mep} instances on separate hosts, supporting coordinated service delivery across distributed deployments.
 
@@ -214,7 +229,7 @@ These management functions interact through a set of Mm reference points. Mm1 co
 
 \ac{mec} does not operate in isolation from the enabling technologies described in the preceding sections; rather, it builds directly on \ac{nfv}, \ac{sdn}, and network slicing to deliver its edge execution model \cite{DouchEdgeComputingTechnologyEnablersSystematic2022}.
 
-The \ac{vi} within each \ac{meh} is, in architectural terms, an instance of the \ac{nfv} infrastructure deployed at the network edge. \ac{mec} applications execute as virtualized entities, such as virtual machines or containers, managed by a \ac{vim} that is functionally equivalent to its \ac{nfv}-\ac{mano} counterpart. The lifecycle procedures carried out by the \ac{mepm} and \ac{meo}, like application onboarding, instantiation, scaling, relocation, and termination, directly mirror the \ac{vnfm} and \ac{nfvo} procedures defined by the \ac{etsi} \ac{nfv} framework, with the addition of mobility-driven relocation as an edge-specific operational requirement.
+The \ac{vi} within each \ac{meh} is, in architectural terms, an instance of the \ac{nfv} infrastructure deployed at the network edge. \ac{mec} applications execute as virtualized entities, such as virtual machines or containers, managed by a \ac{vim} that is functionally equivalent to its \ac{nfv}-\ac{mano} counterpart. The lifecycle procedures carried out by the \ac{mepm} and \ac{meo}, like application onboarding, instantiation, scaling, relocation, and termination, directly mirror the \ac{vnfm} and \ac{nfvo} procedures defined by \ac{etsi} \ac{nfv} framework, with the addition of mobility-driven relocation as an edge-specific operational requirement.
 
 \ac{sdn} underpins the traffic steering that directs flows from \acp{ue} or from the core network to the appropriate \ac{mec} application. The Mp2 reference point between the \ac{mep} and the \ac{vi} data plane functions as a southbound control interface: the \ac{mep} installs traffic rules that redirect specific flows to registered application endpoints on the host. At a larger scale, \ac{sdn} controllers operating at the transport layer can steer \ac{ue} traffic toward the nearest or most appropriate \ac{mec} host as users move across the coverage area, enabling network-wide traffic management that complements the host-local rule enforcement provided by Mp2.
 
