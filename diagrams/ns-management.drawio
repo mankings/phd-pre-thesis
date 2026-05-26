@@ -1,0 +1,94 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="8qAvvUkIYhehn7_FUEkA">
+    <mxGraphModel dx="754" dy="724" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=right;verticalAlign=top;" value="Network Operator&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="250" width="460" x="110" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-1" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Customer" vertex="1">
+          <mxGeometry height="60" width="30" x="470" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" value="&amp;nbsp; &amp;nbsp; &amp;nbsp;Service&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;Provider" vertex="1">
+          <mxGeometry height="80" width="190" x="130" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-29" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;" target="hSdZJ0nkk0hpRunRR0GP-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="230" />
+            </Array>
+            <mxPoint x="320" y="230" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-30" connectable="0" parent="hSdZJ0nkk0hpRunRR0GP-29" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="SLAs" vertex="1">
+          <mxGeometry relative="1" x="-0.152" y="2" as="geometry">
+            <mxPoint x="7" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="CSMF" vertex="1">
+          <mxGeometry height="40" width="90" x="210" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" value="&amp;nbsp; &amp;nbsp; &amp;nbsp;Network Slice&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;Provider" vertex="1">
+          <mxGeometry height="80" width="190" x="130" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-27" edge="1" parent="1" source="hSdZJ0nkk0hpRunRR0GP-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;" target="hSdZJ0nkk0hpRunRR0GP-23">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="385" />
+              <mxPoint x="370" y="385" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="NSMF" vertex="1">
+          <mxGeometry height="40" width="90" x="210" y="355" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-12" edge="1" parent="1" source="hSdZJ0nkk0hpRunRR0GP-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="hSdZJ0nkk0hpRunRR0GP-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-13" connectable="0" parent="hSdZJ0nkk0hpRunRR0GP-12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Service Profile" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="-1" as="geometry">
+            <mxPoint y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" value="&amp;nbsp; &amp;nbsp; NS Subnet&lt;br&gt;&amp;nbsp; &amp;nbsp; Provider A" vertex="1">
+          <mxGeometry height="80" width="190" x="130" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="NSSMF" vertex="1">
+          <mxGeometry height="40" width="90" x="210" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" value="&amp;nbsp; &amp;nbsp; NS Subnet&lt;br&gt;&amp;nbsp; &amp;nbsp; Provider B" vertex="1">
+          <mxGeometry height="80" width="190" x="360" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="NSSMF" vertex="1">
+          <mxGeometry height="40" width="90" x="440" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-18" edge="1" parent="1" source="hSdZJ0nkk0hpRunRR0GP-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="hSdZJ0nkk0hpRunRR0GP-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-21" connectable="0" parent="hSdZJ0nkk0hpRunRR0GP-18" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Slice Profile 1" vertex="1">
+          <mxGeometry relative="1" x="-0.14" y="-1" as="geometry">
+            <mxPoint x="-29" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-19" edge="1" parent="1" source="hSdZJ0nkk0hpRunRR0GP-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="hSdZJ0nkk0hpRunRR0GP-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-20" connectable="0" parent="hSdZJ0nkk0hpRunRR0GP-19" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Slice Profile 2" vertex="1">
+          <mxGeometry relative="1" x="0.0179" y="1" as="geometry">
+            <mxPoint x="6" y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-26" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;size=0.4;" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="100" x="420" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-25" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;size=0.4;" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="100" x="410" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="hSdZJ0nkk0hpRunRR0GP-23" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;size=0.4;" value="NS Instances" vertex="1">
+          <mxGeometry height="50" width="100" x="400" y="370" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

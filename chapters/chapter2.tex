@@ -51,13 +51,13 @@ The most relevant network functions of the \ac{5g} core are briefly described as
     \item The \ac{af} represents external or operator applications which are able to interact with the \ac{5g} core via the \ac{nef}.
 \end{itemize}
 
+% ran
 Complementing the core, the \ac{ran} is responsible for the radio interface between \acp{ue} and the network, handling wireless transmission, scheduling, and handover. In the 5G architecture, the \ac{ran} is realized by \acp{gnb}, which connect to the core via the NG interface and to one another via the Xn interface for mobility coordination \cite{3GPPNGRANArchitecturedescription}.
 
 \subsection{5G-Advanced and the 6G Vision}
 
-In the latest years, the \ac{3gpp} standardization roadmap extended the 5G baseline through a series of incremental releases, collectively referred to as 5G-Advanced \cite{3GPPDigitalcellulartelecommunicationssystemPhase}. These releases introduce native \ac{ai} and \ac{ml} capabilities across both the \ac{ran} and core network, enabling data-driven optimization of resource management, handover decisions, and load balancing. Further enhancements address cross-domain network slicing, extended support for \ac{xr} and immersive services, reduced-capability device classes targeting \ac{iiot} and wearables, and significant improvements in energy efficiency. The trajectory established by these releases directly anticipates the requirements being formalized for the sixth generation under the ITU-R IMT-2030 framework.
+Starting with Release 18 (Rel-18) \cite{3GPPDigitalcellulartelecommunicationssystemPhase} and continuing through Release 19 (Rel-19) \cite{3GPPDigitalcellulartelecommunicationssystemPhaseRel19}, the \ac{3gpp} standardization roadmap extended the 5G baseline through a series of incremental releases, collectively referred to as 5G-Advanced. These releases introduce native \ac{ai} and \ac{ml} capabilities across both the \ac{ran} and core network, enabling data-driven optimization of resource management, handover decisions, and load balancing. Further enhancements address cross-domain network slicing, extended support for \ac{xr} and immersive services, reduced-capability device classes targeting \ac{iiot} and wearables, and significant improvements in energy efficiency. The cross-domain slicing enhancements in particular extend slice-aware \ac{mec} resource management beyond single-operator boundaries, establishing the groundwork for the multi-domain federation requirements being formalized for the sixth generation under the ITU-R IMT-2030 framework.
 
-% 6g usage scenarios 
 The ITU-R defines six usage scenarios for IMT-2030, expanding upon the three scenarios introduced in IMT-2020 while introducing new scenarios that previous generations were not designed to support \cite{IMTFrameworkoverallobjectivesfuturedevelopment2023}:
 
 \begin{itemize}
@@ -104,14 +104,13 @@ The other components of the framework are the \ac{oss}/\ac{bss}, which allows fo
 \end{figure}
 
 
-
 \section{Software Defined Networking}
 
-In conventional network architectures, routing decisions, forwarding table computation, and policy enforcement are embedded within each device and managed independently through vendor-specific interfaces. With no global view of network state and per-device configuration as the only operational primitive, adapting to traffic demands or failures is slow and costly.
+In conventional network architectures, routing decisions, forwarding table computation, and policy enforcement are embedded within each device and managed independently through vendor-specific interfaces. With no global view of network state and per-device configuration as the only operational primitive, adapting to traffic demands or failures is slow and costly \cite{ONFSoftwareDefinedNetworksNewNorm2012}.
 
-\ac{sdn} addresses these limitations by decoupling the control plane, responsible for computing forwarding decisions and enforcing network-wide policies, from the data plane, responsible for packet forwarding. Network intelligence is consolidated in a logically centralized controller, which maintains a global view of the network topology and programs forwarding behavior across the infrastructure through standardized interfaces. This separation transforms the network into a programmable, software-driven resource that can be dynamically configured to meet changing service demands. By holding a consistent model of the full topology, the controller enables network-wide optimizations, such as coordinated policy enforcement, real-time flow rerouting, and automated provisioning, that are impractical when control is fragmented across independent devices. Furthermore, standardized southbound interfaces allow the controller to manage forwarding elements from heterogeneous vendors, and northbound \acp{api} expose network resources to higher-level orchestration systems, enabling tight coordination with complementary frameworks such as \ac{nfv}.
+\ac{sdn} addresses these limitations by decoupling the control plane, responsible for computing forwarding decisions and enforcing network-wide policies, from the data plane, responsible for packet forwarding \cite{dhale2025SoftwareDefinedNetworkingSDN}. Network intelligence is consolidated in a logically centralized controller, which maintains a global view of the network topology and programs forwarding behavior across the infrastructure through standardized interfaces. This separation transforms the network into a programmable, software-driven resource that can be dynamically configured to meet changing service demands. By holding a consistent model of the full topology, the controller enables network-wide optimizations, such as coordinated policy enforcement, real-time flow rerouting, and automated provisioning, that are impractical when control is fragmented across independent devices. Furthermore, standardized southbound interfaces allow the controller to manage forwarding elements from heterogeneous vendors, and northbound \acp{api} expose network resources to higher-level orchestration systems, enabling tight coordination with complementary frameworks such as \ac{nfv}.
 
-Beyond these core properties, \ac{sdn} enables:
+Beyond these core properties, \ac{sdn} enables \cite{dhale2025SoftwareDefinedNetworkingSDN}:
 \begin{itemize}
     \item \emph{Vendor Agnosticism}: Standardized southbound interfaces reduce dependency on proprietary hardware and vendor lock-in;
     \item \emph{Dynamic Traffic Management}: The controller can reroute flows in real time based on current conditions, application requirements, or operator-defined policies;
@@ -131,13 +130,13 @@ Figure \ref{fig:sdn_architecture} shows an overview of the \ac{sdn} architecture
 
 The infrastructure layer comprises the physical and virtual forwarding devices that constitute the data plane. These devices do not compute forwarding decisions autonomously; instead, they execute flow rules programmed by the controller, matching incoming packets against installed entries and applying the associated forwarding, dropping, or marking actions defined in their flow tables.
 
-The control layer hosts the \ac{sdn} controller, which maintains a logically centralized, real-time model of the network topology and computes forwarding policies on behalf of the infrastructure devices. The controller translates high-level intents into low-level flow rules and disseminates these rules to the appropriate forwarding elements. Widely adopted open-source controller implementations include ONOS and OpenDaylight, both of which provide extensible platforms for building network control applications.
+The control layer hosts the \ac{sdn} controller, which maintains a logically centralized, real-time model of the network topology and computes forwarding policies on behalf of the infrastructure devices. The controller translates high-level intents into low-level flow rules and disseminates these rules to the appropriate forwarding elements.
 
 The application layer contains network applications that consume the controller's abstractions to implement higher-order network behaviors, such as load balancing, traffic engineering, access control, and network slice management. Applications interact with the controller without requiring knowledge of the underlying hardware topology or forwarding mechanisms.
 
-These layers communicate through three categories of interface. The southbound interface connects the controller to infrastructure devices; OpenFlow is the dominant protocol, defining the message format and procedure for installing, modifying, and querying flow tables on forwarding elements. The northbound interface exposes the controller's network model and programming capabilities to applications, typically through REST \acp{api} or intent-based abstractions; no single standard governs this interface, and implementations vary across controller platforms. An east-west interface can also be considered, enabling coordination between multiple controller instances and supporting distributed or hierarchical controller deployments where no single instance maintains a complete view of a large-scale network.
+These layers communicate through three categories of interface. The southbound interface connects the controller to infrastructure devices; OpenFlow is the dominant protocol, defining the message format and procedure for installing, modifying, and querying flow tables on forwarding elements \cite{AlghamdiSoftwareDefinedNetworkSDNOpenFlow2020}. The northbound interface exposes the controller's network model and programming capabilities to applications, typically through REST \acp{api} or intent-based abstractions; no single standard governs this interface, and implementations vary across controller platforms. An east-west interface can also be considered, enabling coordination between multiple controller instances and supporting distributed or hierarchical controller deployments where no single instance maintains a complete view of a large-scale network.
 
-Within the \ac{5g} architecture, \ac{sdn} principles are directly reflected in the design of the \ac{upf}, whose forwarding behavior is programmatically controlled by the \ac{smf} through the N4 interface. This design applies the same control/data plane separation that defines \ac{sdn} natively within the 5G core, enabling per-session traffic steering, \ac{qos} enforcement, and data path programmability without relying on static, hardware-bound forwarding configurations.
+Within the \ac{5g} architecture, \ac{sdn} principles are directly reflected in the design of the \ac{upf}, whose forwarding behavior is programmatically controlled by the \ac{smf} through the N4 interface. This design applies the same control/data plane separation that defines \ac{sdn} natively within the 5G core, enabling per-session traffic steering, \ac{qos} enforcement, and data path programmability without relying on static, hardware-bound forwarding configurations \cite{3GPP5GSystemarchitecture5GSystem2026}.
 
 
 \section{Network Slicing}
@@ -168,21 +167,23 @@ Network slicing is not an independent abstraction but is technically realized th
 
 Together, \ac{nfv} governs the function plane (instantiation, scaling, and termination of per-slice network functions) while \ac{sdn} governs the transport plane (isolation, steering, and policing of per-slice flows). The slice management layer — the \ac{csmf}, \ac{nsmf}, and domain-specific \ac{nssmf} instances — coordinates both through \ac{mano} \acp{api} and \ac{sdn} controller northbound interfaces, translating high-level service requirements into concrete resource allocations and forwarding policies across the full network stack.
 
-\begin{figure}[ht]
-    \centering
-    % \includegraphics[width=0.85\textwidth]{figs/02/network-slicing-management.pdf}
-    \caption{Network slicing management}
-    \label{fig:network_slicing_management}
-\end{figure}
 
 \subsection{Network Slicing Architecture}
 
-The management of network slices in the \ac{3gpp} architecture, as defined in TS 23.501 \cite{3GPP5GSystemarchitecture5GSystem2026}, is organized into three hierarchical functional layers:
+The management of network slices in the \ac{3gpp} architecture, as defined in TS 23.501 \cite{3GPP5GSystemarchitecture5GSystem2026}, is organized into three hierarchical functional layers, as illustrated in Figure~\ref{fig:network_slicing_management}:
+
 \begin{itemize}
     \item \emph{\ac{csmf}}: translates high-level customer-facing service requirements into network slice requirements, acting as the interface between business intent and the network management plane;
     \item \emph{\ac{nsmf}}: manages the lifecycle of \acp{nsi}, coordinating the instantiation and operation of constituent sub-slices and enforcing end-to-end \acp{sla};
     \item \emph{\ac{nssmf}}: manages the lifecycle of individual \acp{nssi} within \ac{ran}, transport and core, allocating and configuring the specific resources required by each sub-slice.
 \end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figs/02/ns-management.pdf}
+    \caption{Network Slicing Management Functions (adapted from \cite{ChahbarComprehensiveSurveyE2E5GNetwork2021})}
+    \label{fig:network_slicing_management}
+\end{figure}
 
 Network slices are identified through the \ac{nssai}, a collection of one or more \acp{snssai}. Each \ac{snssai} comprises two fields: the \ac{sst}, which encodes the service category, and an optional \ac{sd}, which allows operators to differentiate among multiple slices of the same service type. The \ac{3gpp} specification standardizes four \ac{sst} values: \ac{embb} (1), \ac{urllc} (2), \ac{mmtc} (3), and \ac{v2x} (4). The 24-bit \ac{sd} field provides an operator-defined namespace for further differentiation.
 
@@ -233,7 +234,7 @@ The \ac{vi} within each \ac{meh} is, in architectural terms, an instance of the 
 
 \ac{sdn} underpins the traffic steering that directs flows from \acp{ue} or from the core network to the appropriate \ac{mec} application. The Mp2 reference point between the \ac{mep} and the \ac{vi} data plane functions as a southbound control interface: the \ac{mep} installs traffic rules that redirect specific flows to registered application endpoints on the host. At a larger scale, \ac{sdn} controllers operating at the transport layer can steer \ac{ue} traffic toward the nearest or most appropriate \ac{mec} host as users move across the coverage area, enabling network-wide traffic management that complements the host-local rule enforcement provided by Mp2.
 
-Network slicing extends \ac{mec} into a multi-tenant edge execution environment. A single \ac{meh} can host applications belonging to multiple concurrent slices, with compute, storage, and networking resources partitioned according to per-slice \acp{sla}. The \ac{nssmf}, acting on behalf of the \ac{nsmf}, can coordinate with the \ac{meo} and \ac{mepm} to instantiate slice-specific edge applications as components of the core or \ac{ran} sub-slice, ensuring that edge resource allocation is governed consistently with the end-to-end performance contract of the slice. This integration, sometimes referred to as slice-aware \ac{mec}, is the architectural basis for deploying differentiated edge services — such as a latency-critical industrial automation application on a \ac{urllc} slice and a video analytics workload on an \ac{embb} slice — on the same physical host while preserving mutual isolation.
+Network slicing extends \ac{mec} into a multi-tenant edge execution environment. A single \ac{meh} can host applications belonging to multiple concurrent slices, with compute, storage, and networking resources partitioned according to per-slice \acp{sla}. The \ac{nssmf}, acting on behalf of the \ac{nsmf}, can coordinate with the \ac{meo} and \ac{mepm} to instantiate slice-specific edge applications as components of the core or \ac{ran} sub-slice, ensuring that edge resource allocation is governed consistently with the end-to-end performance contract of the slice. This integration, sometimes referred to as slice-aware \ac{mec}, is the architectural basis for deploying differentiated edge services on the same physical host while preserving mutual isolation.
 
 
 \section{Network Federation}
