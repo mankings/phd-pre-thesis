@@ -141,9 +141,11 @@ Within the \ac{5g} architecture, \ac{sdn} principles are directly reflected in t
 
 \section{Network Slicing}
 
+% intro to network slicing
 The heterogeneous nature of 5G use cases imposes a fundamental tension on network design: the performance requirements of \ac{embb}, \ac{urllc}, and \ac{mmtc} services are not only distinct but often irreconcilable within a single, monolithic network configuration. A configuration tuned for peak throughput necessarily compromises the deterministic latency and reliability demanded by mission-critical applications, while one hardened for ultra-reliability wastes resources when serving bandwidth-intensive media services. Network slicing addresses this constraint by enabling the concurrent operation of multiple logically isolated, independently configured network instances over a shared physical infrastructure, each optimized for the characteristics of its target service \cite{zhang2017NetworkSlicingBaseda}.
 
-A network slice is an end-to-end logical network instance comprising a set of network functions and associated resources (compute, storage, and transport) configured and isolated to satisfy the specific \acp{kpi} of a given service or customer vertical. Each slice spans the full network stack, from the \ac{ran} through the transport domain to the 5G core, and is defined by a \ac{nst}, which captures the performance targets, resource budgets, and topology constraints that govern instantiation and operation. Slices are isolated from one another across the data, control, and management planes, ensuring that faults and congestion within one slice cannot propagate to others.
+% network slice definition
+A network slice is an end-to-end logical network instance comprising a set of network functions and associated resources (compute, storage, and transport) configured and isolated to satisfy the specific \acp{kpi} of a given service. Each slice spans end to end, from the \ac{ran} through the transport domain to the 5G core, and is defined by a \ac{nst}, which captures the performance targets, resource budgets, and topology constraints that govern instantiation and operation. Slices are isolated from one another across the data, control, and management planes, ensuring that faults and congestion within one slice cannot propagate to others.
 
 \begin{figure}[ht]
     \centering
@@ -152,6 +154,7 @@ A network slice is an end-to-end logical network instance comprising a set of ne
     \label{fig:network_slicing_concept}
 \end{figure}
 
+% benefits of network slicing
 From an operational standpoint, slicing yields several properties that a monolithic design cannot provide \cite{3GPP5GSystemarchitecture5GSystem2026}:
 \begin{itemize}
     \item \emph{Logical Isolation}: Each slice operates as an independent network instance, ensuring that traffic, faults, and resource contention within one slice do not affect others;
@@ -161,15 +164,14 @@ From an operational standpoint, slicing yields several properties that a monolit
     \item \emph{Efficient Resource Utilization}: Resources can be dynamically allocated and reallocated across slices according to demand, improving overall infrastructure efficiency compared to statically partitioned, purpose-built networks.
 \end{itemize}
 
+% relation with nfv & sdn
 Network slicing is not an independent abstraction but is technically realized through the joint application of \ac{nfv} and \ac{sdn}. \ac{nfv} provides the virtualization layer that enables per-slice network function instances to be created, configured, and terminated on shared \ac{cots} hardware. Without \ac{nfv}, deploying independent function sets per slice would require dedicated physical appliances for each service type, negating the shared-infrastructure principle that slicing depends upon. The \ac{nfvo} and \ac{vnfm} components of the \ac{mano} framework orchestrate the lifecycle of these per-slice \acp{vnf}, while the \ac{vim} allocates and tracks the compute, storage, and networking resources budgeted to each slice instance.
 
 \ac{sdn} complements this by enforcing per-slice traffic isolation and steering in the data plane. The \ac{sdn} controller programs forwarding rules that segregate slice-specific flows across the shared physical underlay, and enforces policies that prevent cross-slice interference at the transport layer. This mechanism extends the control/data plane separation already present in the 5G core (where the \ac{smf} programs the \ac{upf} via the N4 interface) to an end-to-end scope spanning the \ac{ran}, transport, and core simultaneously.
 
-Together, \ac{nfv} governs the function plane (instantiation, scaling, and termination of per-slice network functions) while \ac{sdn} governs the transport plane (isolation, steering, and policing of per-slice flows). The slice management layer — the \ac{csmf}, \ac{nsmf}, and domain-specific \ac{nssmf} instances — coordinates both through \ac{mano} \acp{api} and \ac{sdn} controller northbound interfaces, translating high-level service requirements into concrete resource allocations and forwarding policies across the full network stack.
+Together, \ac{nfv} governs the function plane (instantiation, scaling, and termination of per-slice network functions) while \ac{sdn} governs the transport plane (isolation, steering, and policing of per-slice flows). The slice management layer coordinates both through \ac{mano} \acp{api} and \ac{sdn} controller northbound interfaces, translating high-level service requirements into concrete resource allocations and forwarding policies across the full network stack.
 
-
-\subsection{Network Slicing Architecture}
-
+% network slices management
 The management of network slices in the \ac{3gpp} architecture, as defined in TS 23.501 \cite{3GPP5GSystemarchitecture5GSystem2026}, is organized into three hierarchical functional layers, as illustrated in Figure~\ref{fig:network_slicing_management}:
 
 \begin{itemize}
@@ -185,12 +187,16 @@ The management of network slices in the \ac{3gpp} architecture, as defined in TS
     \label{fig:network_slicing_management}
 \end{figure}
 
+% slices descriptors, fields and information
 Network slices are identified through the \ac{nssai}, a collection of one or more \acp{snssai}. Each \ac{snssai} comprises two fields: the \ac{sst}, which encodes the service category, and an optional \ac{sd}, which allows operators to differentiate among multiple slices of the same service type. The \ac{3gpp} specification standardizes four \ac{sst} values: \ac{embb} (1), \ac{urllc} (2), \ac{mmtc} (3), and \ac{v2x} (4). The 24-bit \ac{sd} field provides an operator-defined namespace for further differentiation.
 
+% slice selection
 Slice selection is handled at registration time. The \ac{ue} includes a requested \ac{nssai} in its registration request, which the \ac{amf} forwards to the \ac{nssf}. The \ac{nssf} evaluates the request against the \ac{ue}'s subscription profile, operator policy, and current resource availability, returning an allowed \ac{nssai} and, where necessary, a redirection to an \ac{amf} set associated with the target \ac{nsi}.
 
-An end-to-end \ac{nsi} is composed of multiple \acp{nssi}, one per network domain - \ac{ran}, transport and core. The \ac{ran} sub-slice configures the radio resources and \ac{ran} functions assigned to the slice; the transport sub-slice establishes the connectivity between the \ac{ran} and the core; the core sub-slice instantiates the relevant 5G core network functions with the appropriate configurations and policies. Sub-slices may be shared across multiple \acp{nsi} where isolation requirements permit, enabling more efficient use of underlying resources.
+% end-to-end slice meaning
+An end-to-end \ac{nsi} is composed of multiple \acp{nssi}, one per network domain - \ac{ran}, transport and core. The \ac{ran} sub-slice configures the radio resources and \ac{ran} functions assigned to the slice; the transport sub-slice establishes the connectivity between the \ac{ran} and the core; the core sub-slice instantiates the relevant \ac{5g} core network functions with the appropriate configurations and policies. Sub-slices may be shared across multiple \acp{nsi} where isolation requirements permit, enabling more efficient use of underlying resources.
 
+% slices lifecycle
 The lifecycle of a network slice spans five phases: preparation, in which the \ac{nst} is onboarded and feasibility is verified; instantiation, in which the constituent \acp{nssi} are created and configured; activation, in which the slice begins carrying live traffic; operation, in which the slice is continuously monitored and dynamically adapted to changing demand; and decommissioning, in which the slice is gracefully terminated and its resources released. Lifecycle management is coordinated between the \ac{nsmf} and the domain-specific \ac{nssmf} instances, following the interface specifications defined in 3GPP TS 28.530 \cite{3GPP5GManagementorchestrationConceptsuse2026}.
 
 
@@ -241,12 +247,13 @@ Network slicing extends \ac{mec} into a multi-tenant edge execution environment.
 
 The preceding sections have established the individual technologies underpinning this thesis: \ac{5g} architectures provide the programmable substrate; \ac{nfv} and \ac{sdn} enable flexible instantiation and control of network functions; network slicing provides logical isolation and service differentiation; and \ac{mec} positions compute and storage at the network edge. Each of these capabilities has been described within the context of a single administrative domain; in other words, a single operator managing a coherent set of infrastructure and control systems. However, the scenarios motivating this thesis require seamless service delivery across the boundaries of independently administered networks. Multi-domain network federation is the mechanism that enables this cross-boundary coordination.
 
-% \subsection{Concept of Federation}
-
+% intro to federation
 Multi-domain network federation refers to the voluntary sharing of resources, capabilities, and services across distinct administrative domains under agreements that preserve each domain's operational autonomy and policy sovereignty. Unlike roaming, which has historically been mediated by static, bilaterally negotiated arrangements for user-plane connectivity, federation in the context of \ac{5g} and \ac{mec} is dynamic and programmable: operators negotiate and activate cross-domain resource commitments at runtime, through standardized interfaces, in response to observed demand.
 
+% constraints of federation
 The fundamental challenge of federation is coordinating across administrative trust boundaries without compromising domain sovereignty. Each operator controls its own \ac{mano} stack, resource allocation policies, and security perimeter. A federation framework must therefore define inter-domain interfaces through which capability advertisement, resource negotiation, and lifecycle coordination can take place without requiring either domain to expose its internal topology or proprietary configurations to the other. This separation between what is shared — available capacity, service endpoints, performance guarantees — and what remains internal is enforced at the federation boundary, typically through a dedicated federation gateway or brokerage layer.
 
+% federation patterns
 Federation interactions can follow several patterns, depending on the operational scenario:
 \begin{itemize}
     \item \emph{Resource Brokerage}: A consumer domain acquires computational or network capacity from a provider domain to augment its own, with the commitment agnostic to any specific workload;
@@ -254,21 +261,69 @@ Federation interactions can follow several patterns, depending on the operationa
     \item \emph{Workload Offloading}: A domain experiencing transient resource saturation redirects application instances or traffic flows to a federated partner, maintaining service continuity through dynamic load redistribution.
 \end{itemize}
 
-These patterns map directly to the use cases motivating this thesis. High-density transient events — such as a major sporting event at a stadium — generate sudden capacity spikes that a private edge deployment alone cannot absorb; workload offloading to a public operator provides the elastic overflow capacity required. Cross-border \ac{ppdr} operations, in which first responders must maintain communications continuity as they cross administrative or national boundaries, require service chaining across independently administered networks. In both cases, the federation mechanism must activate dynamically and with minimal pre-configuration, since the resource demand is unpredictable in timing, magnitude, and geographic extent.
+% why federation matters for this thesis
+These patterns map directly to the use cases motivating this thesis. High-density transient events, such as a major sporting event at a stadium, generate sudden capacity spikes that a private edge deployment alone cannot absorb; workload offloading to a public operator provides the elastic overflow capacity required. Cross-border \ac{ppdr} operations, in which first responders must maintain communications continuity as they cross administrative or national boundaries, require service chaining across independently administered networks. In both cases, the federation mechanism must activate dynamically and with minimal pre-configuration, since the resource demand is unpredictable in timing, magnitude, and geographic extent.
 
-% \subsection{MEC Federation}
+\subsection{GSMA Operator Platform Group}
 
-\ac{etsi} has addressed inter-domain coordination for \ac{mec} deployments through two complementary specifications. ETSI GR MEC 035 \cite{ETSIMultiaccessEdgeComputingMECStudy2021} examines the scenarios and technical requirements for coordination between distinct \ac{mec} systems — including both inter-operator federations and coordination between a \ac{mec} system and a centralized cloud. The study identifies application context relocation, federated application instantiation, and cross-system service discovery as the primary coordination procedures, and characterizes the information exchange required between the management tiers of the two systems to execute them. ETSI GS MEC 040 \cite{ETSIMultiaccessEdgeComputingMECFederation2023} subsequently defines the Federation Enablement \acp{api}: a set of standardized RESTful interfaces through which a consumer \ac{mec} system can discover the capabilities and available resources of a provider system, request the instantiation of applications on remote hosts, and manage the lifecycle of federated application instances. These \acp{api} extend the Mp3 inter-platform reference point beyond a single operator's deployment, enabling programmatic interaction between administratively distinct \ac{mec} systems.
+% motivation
+Mobile operators have historically deployed their infrastructure using proprietary vendor stacks and closed management interfaces, rendering their network capabilities — edge compute, connectivity services, and network slices — inaccessible to external parties through standardized, programmatic means. This fragmentation prevents the realization of cross-operator service delivery and impedes the dynamic multi-domain federation that 5G and \ac{mec} architectures are designed to support.
 
-The key procedures governed by these interfaces include: \emph{application context relocation}, in which a running application instance is migrated from a source \ac{meh} to a target host in a different domain with minimal service interruption; \emph{federated application instantiation}, in which a consumer system onboards and activates an application on a provider host, using the provider's computational resources while retaining management authority; and \emph{cross-domain service discovery}, in which a consumer system queries a provider's service registry to locate \ac{mec} services hosted in the remote domain. Together, these procedures provide the technical primitives for cross-domain \ac{mec} operation.
+% gsma opg initiative and objectives
+The \ac{gsma} Operator Platform initiative, developed by the Operator Platform Group (OPG), addresses this by defining a framework through which mobile operators can expose their network and edge capabilities to application developers, enterprises, and peer operators through standardized, programmable interfaces \cite{GSMAOperatorPlatformConceptArchitecture2022}. Three principal objectives guide the initiative: enabling vendor-agnostic capability exposure by abstracting over heterogeneous internal infrastructure; supporting programmable federation between peer operators without requiring pre-negotiated bilateral arrangements; and providing a unified \ac{api} surface through which application developers and enterprises can consume edge and network resources across multiple operators without per-operator integration effort.
 
-The current ETSI MEC 040 framework carries, however, limitations that constrain its applicability to the dynamic federation scenarios motivating this thesis. The specification assumes pre-established peering relationships between federating systems, requiring bilateral configuration before any runtime exchange can occur. There is no mechanism for dynamic peer discovery, real-time \ac{sla} negotiation, or automated trust establishment between previously unknown domains. Addressing these limitations requires a higher-level federation governance layer capable of automating the establishment and management of federation relationships at runtime — precisely the gap this thesis targets.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/02/operator-platform-arch.png}
+    \caption{GSMA OP reference architecture \cite{GSMAOperatorPlatformConceptArchitecture2022}}
+    \label{fig:op_reference_architecture}
+\end{figure}
 
-% \subsection{GSMA Operator Platform and East-West Bound Interfaces}
+% reference architecture overview
+The \ac{op} reference architecture, illustrated in Figure \ref{fig:op_reference_architecture}, organizes the platform around a core capability layer flanked by three families of standardized interface. The \ac{op} core maintains a resource controller responsible for tracking available compute, connectivity, and slice resources; a service registry through which capabilities are advertised and discovered; and a capability advertisement engine that propagates availability to consuming parties. Surrounding the core, the platform exposes three interface families: the \ac{nbi}, connecting the platform upward to application consumers; the \ac{sbi}, connecting it downward to the underlying infrastructure; and the \ac{ewbi}, connecting peer \ac{op} instances laterally for inter-domain federation.
 
-The \ac{gsma} Operator Platform initiative, developed by the Operator Platform Group (OPG), defines a framework through which mobile operators can expose their network and edge capabilities — including compute resources, \ac{mec} services, network slices, and connectivity \acp{api} — to application developers, enterprises, and peer operators through standardized, programmable interfaces \cite{GSMAOperatorPlatformConceptArchitecture2022}. The central objective is to decouple capability exposure from internal implementation, allowing each operator to present a consistent, interoperable interface regardless of the underlying vendor stack. The technical requirements for this exposure, covering resource discovery, application lifecycle management, and inter-operator interface contracts, are defined in the associated Telco Edge Cloud specifications \cite{GSMANGTelcoEdgeCloudTechnicalRequirements2022}.
+% nbi
+The \ac{nbi} exposes operator capabilities to application developers, enterprises, and vertical service providers. Through the \ac{nbi}, consumers can discover available edge compute locations and their resource profiles, query network slice offerings, and manage the lifecycle of their applications without knowledge of the operator's internal management stack.
 
-Central to the Operator Platform architecture are \acp{ewbi} — interfaces through which peer operators negotiate, activate, and manage cross-domain resources and services at the control plane level. \acp{ewbi} are explicitly distinguished from Northbound interfaces, which expose capabilities to application consumers above the operator stack, and from Southbound interfaces, which configure the underlying infrastructure. Operating at the inter-operator control plane, \acp{ewbi} enable dynamic resource negotiation, slice extension across domain boundaries, and mutual capability advertisement between administratively distinct systems, without requiring either operator to expose its internal management plane to the other. This architectural positioning makes \acp{ewbi} the natural federation control interface for the scenarios considered in this thesis.
+% sbi
+The \ac{sbi} connects the \ac{op} to the heterogeneous infrastructure underlying each deployment, abstracting over the operator's existing \ac{mec} hosts, 5G core network functions, and \ac{mano} components to present a normalized resource view to the partner \ac{op}. This abstraction allows the platform to maintain a consistent \ac{nbi} and \ac{ewbi} surface across operators running fundamentally different internal architectures, and is the mechanism through which the OPG initiative achieves its vendor-agnosticism objective.
 
-In the context of this work, \acp{ewbi} are the primary mechanism through which the proposed federation architecture automates cross-domain slice coordination. The ability to advertise available capacity, negotiate slice extensions, and activate cross-domain application instances through standardized programmatic interfaces is a prerequisite for the real-time federation demanded by both the stadium and the \ac{ppdr} use cases. The \ac{gsma} Operator Platform provides the policy and governance layer that regulates these interactions, while the ETSI MEC 040 \acp{api} \cite{ETSIMultiaccessEdgeComputingMECFederation2023} provide the technical execution layer — together forming a complementary two-tier federation stack on which this thesis builds its proposed architecture.
+% ewbi
+The \ac{ewbi} enables federation between \ac{op}. It supports four federation procedures: capability advertisement, through which operators publish available resource types, quantities, and performance envelopes to other \acp{op}; resource reservation, through which a consumer operator requests and commits to a capacity allocation from a provider; \ac{sla} negotiation, through which performance parameters and remediation commitments are agreed between domains; and cross-domain slice extension, through which an active network slice in one domain is extended to encompass resources hosted by a peer operator. The trust boundary enforced by the \ac{ewbi} is a fundamental design property: what is shared, such as available capacity, service endpoints, and \ac{sla} commitments, is explicitly distinguished from internal network topology vendor configuration and the internal management plane, ensuring that federation does not require either operator to expose its operational infrastructure to the other.
 
+% open challenges
+Despite the comprehensiveness of the OPG framework, several operational challenges remain unresolved in the current specification. The \ac{ewbi} procedures assume that peer operators have established a trust relationship prior to live interaction; the bootstrapping of such relationships for previously unknown operators is not addressed. \ac{sla} enforcement across administrative boundaries — specifically, how a consumer operator verifies provider compliance for resources it cannot directly observe — remains an open problem. The scalability of capability advertisement under high resource-state churn and the absence of mechanisms for dynamic, zero-prior-agreement federation are particularly consequential for the transient-event and cross-border scenarios motivating this thesis, where demand is unpredictable and pre-negotiated bilateral arrangements are impractical.
+
+\subsection{ETSI MEC Federation and OpenOP}
+
+% mec federation background
+As the deployment of \ac{mec} spread across operator networks, the single-domain scope of the original GS MEC 003 reference architecture proved insufficient for scenarios requiring cross-operator service continuity. ETSI \ac{mec} \ac{isg} addressed this gap through a two-stage process: first characterizing the problem space in a study-phase group report, then formalizing its outcome as normative \acp{api}. GR MEC 035 \cite{ETSIMultiaccessEdgeComputingMECStudy2021} established the scope of the federation problem, analyzing use cases including \ac{ue} mobility across operator boundaries, \ac{v2x} service continuity through foreign \ac{mec} deployments, and transient-event capacity overflow requiring cross-operator edge offload. ETSI White Paper No. 49 complemented this with non-normative deployment guidance, establishing terminology and classifying architectural options for federated \ac{mec} deployments \cite{ETSIMECFederationDeploymentConsiderations2022}.
+
+% mec federation normative spec
+The normative outcome of these studies is new \ac{mec} reference architecture variant for \ac{mecf} support, as illustrated in Figure~\ref{fig:mecf_architecture}, which includes the new \ac{mef} component, along with two reference points: the Mfm for \ac{mef}-to-\ac{meao} communication, and the Mff for \ac{mef}-to-\ac{mef} signaling. Furthermore, the \ac{gs} \ac{mec} 040 \cite{ETSIMultiaccessEdgeComputingMECFederation2023} specifies the Federation Enablement \acp{api} of the Mff.
+% mff 040 specs are not complete yet, and probably will never be since focus was shifted to etsi oop
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/02/mecf-reference-arch.png}
+    \caption{ETSI \ac{mec} Federation Architecture: extension of the GS MEC 003 reference architecture with the Mfm and Mff inter-system reference points defined in GS MEC 040 \cite{ETSIMultiaccessEdgeComputingMECFederation2023}}
+    \label{fig:mecf_architecture}
+\end{figure}
+
+% etsi sdg oop: context and motivation
+The normative work of ETSI \ac{mec} \ac{isg} and \ac{gsma} OPG produced coherent specifications, but operators and application developers lacked a vendor-neutral, deployable reference implementation against which to validate interoperability. To bridge this gap, \ac{etsi} established the \ac{sdg} Open Operator Platform (\mbox{OpenOP}). Unlike an ETSI \ac{isg}, which produces normative standards, an \ac{sdg} produces open-source software; OpenOP is therefore a code-producing initiative rather than a standards body. Its stated objectives are threefold: to provide a community reference implementation of the \ac{gsma} OPG; to serve as an experimentation platform for 6G testbed federation and telco cloud scenarios; and to generate implementation feedback that informs future standardization cycles \cite{ETSIOpenOPRelease12025}.
+
+% release 1 architecture
+Release 1 (2024--2025) is the first integrated release of OpenOP and organizes the platform around three principal components, as shown in Figure~\ref{fig:openop_architecture} \cite{ETSIOpenOPRelease12025}. The Open Exposure Gateway (OEG) functions as the northbound \ac{api} gateway, exposing telecom capabilities and edge cloud resources through \ac{camara} \acp{api}; it maps directly to the \ac{nbi} of the \ac{gsma} \ac{op} reference architecture and provides the interface through which application developers and enterprises consume edge resources across participating operators. The Service Resource Manager (SRM) handles application lifecycle orchestration and coordinates deployment across edge cloud zones by integrating with underlying \ac{nfv} \ac{mano} and \ac{mec} management stacks; it implements the core resource controller and service registry functions of the \ac{gsma} \ac{op} architecture and mediates the \ac{sbi} toward heterogeneous operator infrastructure. A third module provides intent-based interaction through a Model Context Protocol server backed by a large language model, translating natural-language operator intents into \ac{camara} \ac{api} calls. For federation, Release 1 implements the \ac{gsma} OPG \ac{ewbi} and aligns with the ETSI GS MEC 040 Mff reference point, supporting capability advertisement, resource reservation, and cross-domain service deployment between federated OpenOP instances.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/02/oop-architecture-rel1.png}
+    \caption{ETSI OpenOP Release 1 \cite{ETSIOpenOPRelease12025}}
+    \label{fig:openop_architecture}
+\end{figure}
+
+% open challenges
+Release 1 demonstrates the feasibility of a unified, open-source federation platform but leaves several challenges open. Trust bootstrapping for previously unknown operators — the initial establishment of federated relationships without pre-negotiated bilateral agreements — is not addressed, mirroring the limitation identified in the \ac{gsma} OPG specification. \ac{sla} enforcement across administrative boundaries, specifically the verification of provider compliance for resources a consumer operator cannot directly observe, remains unsolved. Capability advertisement scalability under high resource-state churn and the absence of mechanisms for dynamic, zero-prior-agreement federation are consequential gaps for the transient-event and cross-border scenarios motivating this thesis, where demand is unpredictable and pre-configured bilateral arrangements are operationally impractical.
+
+\subsection{3GPP ???}
