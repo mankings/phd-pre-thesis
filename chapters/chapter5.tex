@@ -2,15 +2,74 @@
 \label{chap:workplan-schedule}
 
 \begin{introduction}
-
+This chapter presents the research workplan, structured into five \acp{wp}. Gantt chart
 \end{introduction}
 
-\section{WP1: Technological Assessment and State of the Art (Sept 2025 - Feb 2026)}
+%  (Sept 2025 - Feb 2026)
+\section{WP1: Technological Assessment and State of the Art}
 
-\section{WP2: Architecture Design for Federated Edge and Slicing (Mar 2026 - Oct 2026)}
+\ac{wp}1 establishes the research foundation through systematic survey and critical analysis of the state of the art in edge networking, \ac{mec}, network slicing, and multi-domain federation, identifying open challenges and limitations of existing solutions that motivate and constrain the proposed research.
 
-\section{WP3: Implementation of Federation and Orchestration Mechanisms (Nov 2026 - Oct 2027)}
+\subsection{Task 1.1 - Literature Review}
 
-\section{WP4: End-to-End Validation in Deployment Scenarios (Nov 2027 - May 2028)}
+This task conducts a systematic review of the scientific literature on \ac{mec} slice mobility, private/public edge integration, and multi-domain network federation. The review targets the identification of open research challenges that motivate the proposed research, such as trust bootstrapping between previously unknown administrative domains, \ac{sla} enforcement across operator boundaries, scalability under high resource-state churn, and zero-prior-agreement federation.
 
-\section{WP5: Dissemination and Final Thesis (Continuous; Finalizing Jun 2028 - Aug 2028)}
+\subsection{Task 1.2 - Standards, Technologies and Solutions}
+
+Building on the literature survey, this task performs a structured analysis of relevant normative standards and open-source implementations. Standards from the \ac{etsi} \ac{mec} \ac{isg}, the \ac{gsma} \ac{opg}, and \ac{3gpp} network slicing specifications will be reviewed. The \ac{etsi} OpenOP Release 1 open-source platform is assessed in detail for a possible concrete baseline.
+
+% (Mar 2026 - Oct 2026)
+\section{WP2: Architecture Design for Federated Edge and Slicing}
+
+\ac{wp}2 produces the core architectural contributions of the research: a stateless \ac{mec} slice mobility framework for private-to-public edge handoffs, and an inter-domain service chain orchestration architecture for cross-administrative-boundary deployments, both grounded in the Smart Stadium and \ac{ppdr} use cases.
+
+\subsection{Task 2.1 - Stateless \ac{mec} Slice Mobility Framework}
+
+This task designs a stateless \ac{mec} slice mobility management framework that treats network slices as portable microservice bundles, enabling their migration between edge infrastructure without stateful coupling to the origin domain. The design defines state externalisation mechanisms, migration trigger criteria, and handoff coordination procedures for edge transitions.
+
+\subsection{Task 2.2 - Inter-Domain Slice Orchestration Architecture}
+
+This task designs interconnection mechanisms enabling the instantiation and lifecycle management of cross-domain service chains across independently administered network domains. The architecture specifies extensions to the \ac{ewbi} for dynamic capability advertisement, resource reservation, and \ac{sla} negotiation between previously unknown administrative domains.
+
+% (Nov 2026 - Oct 2027)
+\section{WP3: Implementation of Federation and Orchestration Mechanisms}
+
+\ac{wp}3 implements the designed frameworks as functional open-source software components. The primary deliverables are the stateless \ac{mec} slice mobility manager (R2) and the concrete federation architecture (R1).
+
+\subsection{Task 3.1 - Intent-Driven Service Orchestration Engine}
+
+This task develops an intent-driven orchestration subsystem capable of dynamically deploying and managing service chains in response to real-time demand. The engine integrates with underlying platform orchestration components and exposes a high-level intent interface, abstracting system complexity from service consumers. The system automates procedures such as capability discovery, resource negotiation, and slice instantiation across edge infrastructure from different administrative domains.
+
+\subsection{Task 3.2 - \ac{ewbi} and Federation Enablement Mechanisms}
+
+This task implements the \ac{ewbi} and the supporting mechanisms required for live sharing and mobility of edge resources across multiple providers. The implementation encompasses trust bootstrapping between previously unknown administrative domains, dynamic operator capability exchange, and continuous \ac{sla} monitoring. The developed mechanisms are integrated with the orchestration engine to form a coherent end-to-end federation stack.
+
+% (Nov 2027 - May 2028)
+\section{WP4: End-to-End Validation in Deployment Scenarios}
+
+\ac{wp}4 validates the developed system through two representative real-world deployment scenarios to produce concrete, quantified demonstrations of operational feasibility and performance (R3, R4).
+
+\subsection{Task 4.1 - Stadium Scenario}
+
+This task integrates and tests the stateless \ac{mec} slicing and federation framework in a high-density Smart Stadium environment. The validation exercise orchestrates overflow compute capacity from public \ac{mec} infrastructure in response to simulated crowd-driven load spikes, and measures end-to-end latency, throughput, and handoff times for crowd management analytics workloads under peak conditions.
+
+\subsection{Task 4.2 - \ac{ppdr} Scenario}
+
+This task realises and verifies the multi-level federation mechanisms in a simulated cross-border \ac{ppdr} scenario, modelling first-responder communications that must maintain operational continuity while crossing administrative and national boundaries. The validation assesses end-to-end performance, policy enforcement under dynamic federated conditions, and the ability of the system to sustain mission-critical service guarantees throughout inter-domain mobility events.
+
+% (Continuous; Finalizing Jun 2028 - Aug 2028)
+\section{WP5: Dissemination and Final Thesis}
+
+\ac{wp}5 encompasses continuous dissemination activities culminating in the production and defence of the final thesis, covering scientific publication of research contributions, open-source release of all developed components, and their synthesis into a cohesive scholarly document (R5).
+
+\subsection{Task 5.1 - Article Publishing}
+
+This task manages the submission and publication of scientific articles to top-tier telecommunications conferences and journals, covering the key architectural, implementation, and evaluation contributions produced across \acp{wp}2--4. The publication strategy is aligned with research milestone completion, aiming to publish at least one paper per \ac{wp}.
+
+\subsection{Task 5.2 - Open-Source Release}
+
+This task coordinates the release of the federation and orchestration components developed in \ac{wp}3 as open-source contributions, enabling the broader research and operator community to deploy, validate, and extend the developed mechanisms.
+
+\subsection{Task 5.3 - Final Thesis}
+
+This task covers the writing and public defence of the final PhD thesis document, synthesising contributions across all work packages into a coherent narrative.
