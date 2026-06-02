@@ -2,8 +2,28 @@
 \label{chap:workplan-schedule}
 
 \begin{introduction}
-This chapter presents the research workplan, structured into five \acp{wp}. Gantt chart
+This chapter presents the research workplan, structured into five \acp{wp}. Then, expected deliverables are outlined, research milestones are identified, and a Gantt chart of the workplan is presented. 
 \end{introduction}
+
+\section{WP0: Course Enrolment}
+
+\ac{wp}0 encompasses tasks relating to mandatory activities of the doctoral program, which are as follows:
+
+\subsection{Task 0.1 - Curricular Classes}
+
+This task corresponds to the curricular courses of the PhD, which are Scientific Research Methodology, Thesis Project Preparation, and a Free Option, which was chosen to be Tutorial Practice. This task also encompasses the deliverables for each class.
+
+\subsection{Task 0.2 - Thesis Proposal}
+
+This task aims to define the objective of the thesis, resulting in a fundamented thesis proposal that includes a preliminary \ac{sota} survey and a research statement (the present document).
+
+\subsection{Task 0.3 - Progress Reports}
+
+This task covers the annual progress reports stating the developments made over the the respective year of research, identifying if the proposed milestones are being accomplished and possible adjustments to the research and development plans. 
+
+\subsection{Task 0.4 - Final Thesis}
+
+This task covers the writing and public defence of the final PhD thesis document, synthesising contributions across all work packages into a coherent narrative (R5).
 
 %  (Sept 2025 - Feb 2026)
 \section{WP1: Technological Assessment and State of the Art}
@@ -16,33 +36,33 @@ This task conducts a systematic review of the scientific literature on \ac{mec} 
 
 \subsection{Task 1.2 - Standards, Technologies and Solutions}
 
-Building on the literature survey, this task performs a structured analysis of relevant normative standards and open-source implementations. Standards from the \ac{etsi} \ac{mec} \ac{isg}, the \ac{gsma} \ac{opg}, and \ac{3gpp} network slicing specifications will be reviewed. The \ac{etsi} OpenOP Release 1 open-source platform is assessed in detail for a possible concrete baseline.
+Building on the literature survey, this task performs a structured analysis of relevant normative standards and open-source implementations. Standards from the \ac{etsi} \ac{mec} \ac{isg}, the \ac{gsma} \ac{opg}, and \ac{3gpp} network slicing specifications will be reviewed. Solutions such as \ac{etsi} OpenOP Release 1 are assessed for a possible concrete baselines.
 
 % (Mar 2026 - Oct 2026)
 \section{WP2: Architecture Design for Federated Edge and Slicing}
 
-\ac{wp}2 produces the core architectural contributions of the research: a stateless \ac{mec} slice mobility framework for private-to-public edge handoffs, and an inter-domain service chain orchestration architecture for cross-administrative-boundary deployments, both grounded in the Smart Stadium and \ac{ppdr} use cases.
+\ac{wp}2 aims to design an architectural framework that acomplishes the necessary goals. It is divided into the following tasks:
 
-\subsection{Task 2.1 - Stateless \ac{mec} Slice Mobility Framework}
+\subsection{Task 2.1 - Initial Architecture Design}
 
-This task designs a stateless \ac{mec} slice mobility management framework that treats network slices as portable microservice bundles, enabling their migration between edge infrastructure without stateful coupling to the origin domain. The design defines state externalisation mechanisms, migration trigger criteria, and handoff coordination procedures for edge transitions.
+This task designs architecture solutions for both research problems: a stateless \ac{mec} slice mobility framework that treats network slices as portable microservice bundles enabling migration across edge infrastructure without stateful coupling to the origin domain, and an inter-domain service chain orchestration framework specifying mechanisms for capability advertisement, resource reservation, and \ac{sla} negotiation between previously unknown administrative domains.
 
-\subsection{Task 2.2 - Inter-Domain Slice Orchestration Architecture}
+\subsection{Task 2.2 - Integrated Final Architecture Design}
 
-This task designs interconnection mechanisms enabling the instantiation and lifecycle management of cross-domain service chains across independently administered network domains. The architecture specifies extensions to the \ac{ewbi} for dynamic capability advertisement, resource reservation, and \ac{sla} negotiation between previously unknown administrative domains.
+This task integrates the two candidate designs from Task 2.1 into a single coherent architecture that jointly addresses slice mobility and inter-domain orchestration. The integration identifies shared components, common abstractions, and cross-cutting concerns to produce a consolidated architectural specification that resolves both problems within a single deployable framework.
 
 % (Nov 2026 - Oct 2027)
 \section{WP3: Implementation of Federation and Orchestration Mechanisms}
 
-\ac{wp}3 implements the designed frameworks as functional open-source software components. The primary deliverables are the stateless \ac{mec} slice mobility manager (R2) and the concrete federation architecture (R1).
+\ac{wp}3 implements the designed frameworks as functional open-source software components. Initially, prototypes validating the feasibility of each mechanism will be developed, and later integrated into a unified framework. (R1, R2).
 
-\subsection{Task 3.1 - Intent-Driven Service Orchestration Engine}
+\subsection{Task 3.1 - Initial Implementations and Proof of Concepts}
 
-This task develops an intent-driven orchestration subsystem capable of dynamically deploying and managing service chains in response to real-time demand. The engine integrates with underlying platform orchestration components and exposes a high-level intent interface, abstracting system complexity from service consumers. The system automates procedures such as capability discovery, resource negotiation, and slice instantiation across edge infrastructure from different administrative domains.
+This task focuses on the implementation of the individual architectural components specified in \ac{wp}2 Task 2.1 as functional prototypes, validating and testing the slice mobility and inter-domain federation mechanisms before integration into a consolidated framework.
 
-\subsection{Task 3.2 - \ac{ewbi} and Federation Enablement Mechanisms}
+\subsection{Task 3.2 - Final Integrated Architecture Implementation}
 
-This task implements the \ac{ewbi} and the supporting mechanisms required for live sharing and mobility of edge resources across multiple providers. The implementation encompasses trust bootstrapping between previously unknown administrative domains, dynamic operator capability exchange, and continuous \ac{sla} monitoring. The developed mechanisms are integrated with the orchestration engine to form a coherent end-to-end federation stack.
+This task implements the unified architecture specified in \ac{wp}2 Task 2.2 as a coherent end-to-end system. The PoC components from Task 3.1 are integrated and extended, resulting in a slice mobility framework capable of sharing and mobility of edge resources across multiple providers. The resulting federation stack is released as an open-source software contribution.
 
 % (Nov 2027 - May 2028)
 \section{WP4: End-to-End Validation in Deployment Scenarios}
@@ -60,16 +80,65 @@ This task realises and verifies the multi-level federation mechanisms in a simul
 % (Continuous; Finalizing Jun 2028 - Aug 2028)
 \section{WP5: Dissemination and Final Thesis}
 
-\ac{wp}5 encompasses continuous dissemination activities culminating in the production and defence of the final thesis, covering scientific publication of research contributions, open-source release of all developed components, and their synthesis into a cohesive scholarly document (R5).
+\ac{wp}5 encompasses continuous dissemination activities, covering scientific publication of research contributions and open-source release of all developed components.
 
 \subsection{Task 5.1 - Article Publishing}
 
 This task manages the submission and publication of scientific articles to top-tier telecommunications conferences and journals, covering the key architectural, implementation, and evaluation contributions produced across \acp{wp}2--4. The publication strategy is aligned with research milestone completion, aiming to publish at least one paper per \ac{wp}.
 
-\subsection{Task 5.2 - Open-Source Release}
+\subsection{Task 5.2 - Open-Source Releases}
 
 This task coordinates the release of the federation and orchestration components developed in \ac{wp}3 as open-source contributions, enabling the broader research and operator community to deploy, validate, and extend the developed mechanisms.
 
-\subsection{Task 5.3 - Final Thesis}
 
-This task covers the writing and public defence of the final PhD thesis document, synthesising contributions across all work packages into a coherent narrative.
+\section{Deliverables}
+
+\begin{table}[h!]
+\centering
+\caption{Research Deliverables}
+\label{tab:deliverables}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lp{8.5cm}l@{}}
+\hline
+\textbf{ID} & \textbf{Description} & \textbf{Due} \\
+\hline
+TP & Thesis Proposal                & Jun 2026 \\
+PR & Progress Report                & Sep 2026 \\
+FT & Final Thesis document          & Jun 2028 \\
+TD & Thesis Defence                 & Aug 2028 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\section{Milestones}
+
+\begin{table}[h!]
+\centering
+\caption{Research Milestones}
+\label{tab:milestones}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}llp{8cm}@{}}
+\hline
+\textbf{ID} & \textbf{Due} & \textbf{Description} \\
+\hline
+M1 & Sep 2026 & \ac{sota} survey on \ac{mec}, network slicing, and multi-domain federation complete  \\
+M2 & Sep 2026 & Review of standardization and standard-compliant solutions complete                  \\
+M3 & Jul 2026 & Initial architecture designs for slice mobility and inter-domain comms complete       \\
+M4 & Oct 2026 & Integrated final architecture design complete                                        \\
+M5 & Oct 2027 & Initial \ac{poc} implementations complete and unit-tested                            \\
+M6 & Oct 2027 & Final integrated architecture implemented and open-source released (R1, R2)          \\
+M7 & May 2028 & Smart Stadium scenario validation complete (R3)                                      \\
+M8 & May 2028 & \ac{ppdr} cross-border scenario validation complete (R4)                             \\
+M9 & Aug 2028 & $\geq 3$ scientific publications in top-tier venues                                  \\
+M10 & Aug 2028 & Open-source framework release                                                         \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/gantt2.pdf}
+    \caption{Gantt}
+    \label{fig:gantt}
+\end{figure}
