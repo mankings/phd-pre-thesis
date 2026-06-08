@@ -5,6 +5,12 @@
 
 \end{introduction}
 
+The road towards the next generation of networks has accelerated the deployment of edge computing infrastructure and network slicing across heterogeneous, multi-operator environments. Vertical industries with fundamentally different requirements demand service levels that no single operator can guarantee in isolation. Existing federation standards such as the ones provided by GSMA and ETSI, provide conceptual frameworks and initial API specifications, but a complete and comprehensive implementation of a federated, slice-aware management framework is still non-existing.
+
+In this sense, we propose to research a multi-level federation architecture that integrates private edge infrastructure with public telecom clouds to address these challenges. The central contribution is a stateless \ac{mec} slice mobility framework that treats network slice components as portable, self-contained microservice bundles decoupled from any origin domain's internal state, enabling live relocation across administrative boundaries. Complementing this, the thesis specifies inter-domain orchestration mechanisms grounded in the \ac{ewbi} interface of the \ac{gsma} Operator Platform, supporting dynamic capability advertisement, resource reservation, and \ac{sla} negotiation between domains with no prior relationship. We also plan to integrate intent-based interaction into the solution, mediated through \ac{llm}-backed \ac{mcp} servers, to reduce the operational complexity of activating these cross-domain workflows.
+
+The envisioned outcome is a deployable, open-source federation stack that allows edge operators to federate dynamically, activating resource commitments in real time in response to observed demand and without manual pre-configuration. Two representative scenarios will be used to evaluate the design. In the Smart Stadium scenario, a private edge deployment must elastically overflow into public \ac{mec} infrastructure during crowd-driven load spikes. In the cross-border \ac{ppdr} scenario, first-responder communications must persist across domain transitions under strict reliability constraints. Validation in both scenarios, combined with open-source release of the resulting components, is expected to produce actionable implementation feedback for ongoing standardization work, alongside scientific contributions to the research community.
+
 \section{Research Questions}
 
 The main research questions are as follows:
