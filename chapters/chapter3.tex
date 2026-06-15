@@ -5,7 +5,7 @@
 
 \end{introduction}
 
-The road towards the next generation of networks has accelerated the deployment of edge computing infrastructure and network slicing across heterogeneous, multi-operator environments. Vertical industries with fundamentally different requirements demand service levels that no single operator can guarantee in isolation. Existing federation standards such as the ones provided by GSMA and ETSI, provide conceptual frameworks and initial API specifications, but a complete and comprehensive implementation of a federated, slice-aware management framework is still non-existing.
+The road towards the next generation of networks has accelerated the deployment of edge computing infrastructure and network slicing across heterogeneous, multi-operator environments. Vertical industries with fundamentally different requirements demand service levels that no single operator can guarantee in isolation. Existing federation standards such as the ones provided by GSMA and ETSI, provide conceptual frameworks and initial API specifications, but a complete and comprehensive implementation of a federated, slice-aware management framework is still non-existing. This proposal is primarily grounded in these normative specifications and industry-driven frameworks; the systematic literature review planned for \ac{wp}1 will complement this perspective with a broader survey of the research literature on open challenges and existing solutions.
 
 In this sense, we propose to research a multi-level federation architecture that integrates private edge infrastructure with public telecom clouds to address these challenges. The central contribution is a stateless \ac{mec} slice mobility framework that treats network slice components as portable, self-contained microservice bundles decoupled from any origin domain's internal state, enabling live relocation across administrative boundaries. Complementing this, the thesis specifies inter-domain orchestration mechanisms grounded in the \ac{ewbi} interface of the \ac{gsma} Operator Platform, supporting dynamic capability advertisement, resource reservation, and \ac{sla} negotiation between domains with no prior relationship. We also plan to integrate intent-based interaction into the solution, mediated through \ac{llm}-backed \ac{mcp} servers, to reduce the operational complexity of activating these cross-domain workflows.
 
@@ -31,6 +31,16 @@ The main goals to be achieved are to:
     \item G3. Implement and validate automated inter-domain service orchestration (including G1 and G2 principles).
     \item G4. Validate the proposed federation model against real-world constraints using, e.g., a Smart Stadium crowd management scenario and an inter-domain cross-border PPDR communication scenario.
 \end{itemize}
+
+\section{Validation Scenarios}
+
+The two scenarios adopted in this proposal were selected because they represent complementary extremes of the federated edge problem space, stressing different subsystems of the proposed framework and together providing coverage across all stated research questions and goals.
+
+The Smart Stadium scenario models a high-density commercial deployment in which a private edge installation, sized for average attendance loads, becomes insufficient during peak events. Crowd-driven surges in demand for services such as real-time video analytics and crowd management require rapid, elastic overflow of compute capacity into public \ac{mec} infrastructure. This scenario highlights the elastic nature of federation: the ability to detect demand growth, negotiate resources with an external domain under no prior relationship, and migrate or instantiate slice components in real time while meeting latency bounds.
+
+The cross-border \ac{ppdr} scenario models a persistent, mission-critical deployment in which first-responder communications must remain operational as personnel cross administrative domain boundaries. Unlike the stadium case, demand is not the stress factor, but reliability is. Slice components must be relocated across domains with hard continuity guarantees, policy enforcement must persist through transitions, and service degradation is not acceptable. In this case, resilience is the main validation driver, making it the primary vehicle for validating slice handover continuity, cross-domain policy enforcement persistence, and zero-degradation \ac{sla} compliance under hard operational constraints.
+
+Although these two scenarios currently make the validation effort, the architecture is not to be designed around them. Should the validation context shift, whether due to evolving requirements, testbed availability, or emerging use cases, the framework will be able to accommodate new scenarios without requiring fundamental architectural revision.
 
 \section{Expected Results}
 
