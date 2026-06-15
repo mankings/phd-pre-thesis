@@ -27,9 +27,10 @@ The main goals to be achieved are to:
 
 \begin{itemize}
     \item G1. Design a multi-level federation architecture that seamlessly integrates private edge networks with public telecom clouds.
-    \item G2. Develop a slice mobility management framework that utilizes stateless MEC microservices to improve operational flexibility in high-density environments.
-    \item G3. Implement and validate automated inter-domain service orchestration (including G1 and G2 principles).
-    \item G4. Validate the proposed federation model against real-world constraints using, e.g., a Smart Stadium crowd management scenario and an inter-domain cross-border PPDR communication scenario.
+    \item G2. Develop a slice mobility management framework that utilizes stateless \ac{mec} microservices to improve operational flexibility in high-density environments, treating slice components as portable, containerised microservice bundles with no stateful coupling to the origin domain.
+    \item G3. Implement automated inter-domain service orchestration (including G1 and G2 principles), leveraging the \ac{ewbi} interface for dynamic capability advertisement and \ac{sla} negotiation between domains with no prior relationship.
+    \item G4. Design and integrate an intent-driven interaction layer, mediated through \ac{llm}-backed \ac{mcp} servers, spanning all framework components to reduce the operational complexity of activating workflows.
+    \item G5. Validate the proposed federation model against real-world constraints in a Smart Stadium crowd management scenario and an inter-domain cross-border \ac{ppdr} communication scenario, meeting defined latency and continuity thresholds for each.
 \end{itemize}
 
 \section{Validation Scenarios}
@@ -41,7 +42,6 @@ The Smart Stadium scenario models a high-density commercial deployment in which 
 The cross-border \ac{ppdr} scenario models a persistent, mission-critical deployment in which first-responder communications must remain operational as personnel cross administrative domain boundaries. Unlike the stadium case, demand is not the stress factor, but reliability is. Slice components must be relocated across domains with hard continuity guarantees, policy enforcement must persist through transitions, and service degradation is not acceptable. In this case, resilience is the main validation driver, making it the primary vehicle for validating slice handover continuity, cross-domain policy enforcement persistence, and zero-degradation \ac{sla} compliance under hard operational constraints.
 
 Although these two scenarios currently make the validation effort, the architecture is not to be designed around them. Should the validation context shift, whether due to evolving requirements, testbed availability, or emerging use cases, the framework will be able to accommodate new scenarios without requiring fundamental architectural revision.
-
 \section{Expected Results}
 
 The expected results of the proposed research are:
