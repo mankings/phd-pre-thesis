@@ -6,6 +6,8 @@ build/**/*
 !build/**/
 # And allow gitkeeps
 !build/**/.gitkeep
+# And allow final pdfs
+!build/**.pdf
 
 # Rest for linux,windows,osx,vim,emacs,sublimetext,visualstudiocode
 !.vscode/extensions.json
