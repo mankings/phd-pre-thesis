@@ -70,6 +70,7 @@
 }
 
 \newcommand{\AIUse}[1]{\def\ciAIUse{#1}}
+\newcommand{\ODS}[1]{\def\ciODS{#1}}
 
 %
 % Remove "Documento provisório" from the cover page if the document is final
@@ -569,6 +570,14 @@ do {\ua@textA} {\ua@textB} da Universidade de Aveiro\dolistloop{\ciSupervisorMem
        {\textbf{Recognition of the use of generative Artificial Intelligence technologies and tools, software and other support tools.}\medskip\newline
        \ciAIUse}
 
+\EndTitlePage
+\fi
+
+\ifdefined \ciODS
+\TitlePage
+  \vspace*{55mm}
+  \SECTION{\textbf{objetivos de desenvolvimento sustent\'avel~/\newline sustainable development goals}}
+       {\ciODS}
 \EndTitlePage
 \fi
 
