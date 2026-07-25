@@ -41,6 +41,7 @@
 \newcommand{\TitleEN}[1]{\def\ciTitleEN{#1} }
 \newcommand{\TitlePT}[1]{\def\ciTitlePT{#1} }
 \newcommand{\Author}[2]{\def\ciAuthorFirst{#1}\def\ciAuthorLast{#2}}
+\newcommand{\Orcid}[1]{\def\ciOrcid{#1}}
 \newcommand{\Supervisor}[2]{\def\ciSupervisorName{{#1}}\def\ciSupervisorTitle{{#2}}}
 \newcommand{\Supervisora}[2]{\def\ciSupervisoraName{{#1}}\def\ciSupervisoraTitle{{#2}}}
 \newcommand{\SupervisorMember}[5]{
@@ -479,6 +480,9 @@
   \INNERHEADER{}{\ciThesisYear}
 
 	\TITLE{\DISPLAYAUTHOR}{\selectlanguage{portuguese}\ciTitlePT\newline}
+\ifdefined \ciOrcid
+  \TEXT{}{\small ORCID: \ciOrcid}
+\fi
   \vspace{1em}
 	\TITLE{ }{\selectlanguage{english}\ciTitleEN}
 
